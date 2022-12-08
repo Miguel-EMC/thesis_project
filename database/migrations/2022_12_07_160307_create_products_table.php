@@ -14,7 +14,7 @@ return new class extends Migration {
     {
         Schema::create('products', function (Blueprint $table) {
             // ID para la tabla Appliances de la BD
-            $table->bigIncrements('id');
+            $table->id();
             // columna para la tabla Appliances de la BD
             $table->string('title', 150);
             // precio minimo del electrodomestico
@@ -22,7 +22,7 @@ return new class extends Migration {
             // precio maximo del electrodomestico
             $table->float('price_max', 8, 2);
             // detalle sobre el electrodomestico
-            $table->string('detail', 150);
+            $table->text('detail');
             // stock del electrodomestico
             $table->integer('stock');
             // estado del electrodomestico

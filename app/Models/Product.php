@@ -16,7 +16,6 @@ class Product extends Model
         'detail',
         'stock',
         'state_appliance',
-        'state',
         'delivery_method',
         'brand',
     ];
