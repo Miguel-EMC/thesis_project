@@ -19,12 +19,12 @@ class User extends Authenticatable implements JWTSubject
      * @var array<int, string>
      */
     protected $fillable = [
-        'username', 
-        'first_name', 
-        'last_name', 
-        'personal_phone', 
+        'username',
+        'first_name',
+        'last_name',
+        'personal_phone',
         'home_phone',
-        'address', 
+        'address',
         'email',
         'password',
     ];
@@ -55,5 +55,39 @@ class User extends Authenticatable implements JWTSubject
     public function getJWTCustomClaims()
     {
         return [];
+    }
+
+    // Relación de uno a muchos
+    // Un usuario puede realizar muchas ventas de electrodomesticos
+    public function product()
+    {
+        return $this->hasMany(Product::class);
+    }
+
+    public function categories()
+    {
+        return $this->belongsToMany(Categorie::class)->withTimestamps();
+    }
+
+    // Obtener el nombre completo del usuario
+    public function getFullName()
+    {
+        return "$this->first_name $this->last_name";
+    }
+    // Crear un avatar por default
+    public function getDefaultAvatarPath()
+    {
+        return "https://cdn-icons-png.flaticon.com/512/711/711769.png";
+    }
+    // Obtener la imagen de la BDD
+    public function getAvatarPath()
+    {
+        // se verifica no si existe una iamgen
+        if (!$this->image) {
+            // asignarle el path de una imagen por defecto
+            return $this->getDefaultAvatarPath();
+        }
+        // retornar el path de la imagen registrada en la BDD
+        return $this->image->path;
     }
 }

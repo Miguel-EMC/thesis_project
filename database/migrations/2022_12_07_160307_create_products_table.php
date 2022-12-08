@@ -37,6 +37,13 @@ return new class extends Migration {
             // marca del electrodomestico
             $table->string('brand', 50)->nullable();
 
+            // Un usuario puede tener uno o mas publicaciones de venta de electrodometios y un electrodomestico solo puede tener un usuario.
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')
+                ->references('id')
+                ->on('users')
+                ->onDelete('cascade');
+
             //columna para conocer la fecha de creacion y actualizacion de los registros
             $table->timestamps();
         });

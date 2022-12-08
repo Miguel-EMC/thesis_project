@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Schema;
 
 class DatabaseSeeder extends Seeder
 {
@@ -20,12 +21,16 @@ class DatabaseSeeder extends Seeder
         //     'name' => 'Test User',
         //     'email' => 'test@example.com',
         // ]);
+        Schema::disableForeignKeyConstraints();
         $this->call([
-            UsersTableSeeder::class,
-            ProductsTableSeeder::class,
-            // TagsTableSeeder::class,
-            // CategoriesTableSeeder::class,
-            // CommentsTableSeeder::class,
+            UserSeeder::class,
+            ProductSeeder::class,
+            CategorieSeeder::class,
+            CommentSeeder::class,
+            ChatSeeder::class,
+            ReportSeeder::class,
+            SubscriptionSeeder::class,
         ]);
+        Schema::enableForeignKeyConstraints();
     }
 }

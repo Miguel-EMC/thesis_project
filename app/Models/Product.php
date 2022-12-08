@@ -19,4 +19,25 @@ class Product extends Model
         'delivery_method',
         'brand',
     ];
+
+    // Relación de uno a muchos
+    // Un electrodomestico le pertenece a un usuario
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    // Relación de uno a muchos
+    // Un electrodomestico le pertenece a una categoria
+    public function categories()
+    {
+        return $this->belongsTo(Categorie::class);
+    }
+
+    // Relación polimórfica uno a uno
+    // Un reporte pueden tener una imagen
+    public function image()
+    {
+        return $this->morphOne(Image::class,'imageable');
+    }
 }
