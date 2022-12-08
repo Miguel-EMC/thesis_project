@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\Product\ProductController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
@@ -32,8 +33,17 @@ Route::get('products/', [ProductController::class, 'index']);
 // Rutas protegidas
 Route::group(['middleware' => ['jwt.verify']], function () {
     Route::get('user/', [UserController::class, 'getAuthenticatedUser']);
+
+    // Rutas para el manejo de productos
     Route::get('products/{product}', [ProductController::class, 'show']);
     Route::post('products/', [ProductController::class, 'store']);
     Route::put('products/{product}', [ProductController::class, 'update']);
     Route::delete('products/{product}', [ProductController::class, 'delete']);
+
+    // Rutas para comentarios
+    Route::get('products/{product}/comments/', [CommentController::class, 'index'])->name('comments.index');
+    Route::get('products/{product}/comments/{comment}', [CommentController::class, 'show'])->name('comments.show');
+    Route::post('products/{product}/comments/', [CommentController::class, 'store'])->name('comments.store');
+    Route::put('products/{product}/comments/{comment}', [CommentController::class, 'update'])->name('comments.update');
+    Route::delete('products/{product}/comments/{comment}', [CommentController::class, 'delete'])->name('comments.delete');
 });
