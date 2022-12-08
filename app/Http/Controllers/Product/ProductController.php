@@ -3,13 +3,16 @@
 namespace App\Http\Controllers\Product;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Product as ResourcesProduct;
+use App\Http\Resources\ProductCollection;
+
 use App\Models\Product;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
     public function index(){
-        return Product::all();
+        return new ProductCollection(Product::paginate());
     }
     public function show(Product $product){
         return $product;
