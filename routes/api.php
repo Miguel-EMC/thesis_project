@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Account\AvatarController;
+use App\Http\Controllers\Account\ProfileController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\Product\ProductController;
 use App\Http\Controllers\UserController;
@@ -32,7 +34,16 @@ Route::get('products/', [ProductController::class, 'index']);
 
 // Rutas protegidas
 Route::group(['middleware' => ['jwt.verify']], function () {
-    Route::get('user/', [UserController::class, 'getAuthenticatedUser']);
+        // Se hace uso de grupo de rutas
+        Route::prefix('profile')->group(function ()
+        {
+            Route::controller(ProfileController::class)->group(function ()
+            {
+                Route::get('/', 'show')->name('profile');
+                Route::post('/', 'store')->name('profile.store');
+            });
+            Route::post('/avatar', [AvatarController::class, 'store'])->name('profile.avatar');
+        });
 
     // Rutas para el manejo de productos
     Route::get('products/{product}', [ProductController::class, 'show']);
