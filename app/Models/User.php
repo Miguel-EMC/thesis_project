@@ -58,7 +58,12 @@ class User extends Authenticatable implements JWTSubject
     {
         return [];
     }
-
+    // Relación de uno a muchos
+    // Un usuario le pertenece un rol
+    public function role()
+    {
+        return $this->belongsTo(Role::class);
+    }
     // Relación de uno a muchos
     // Un usuario puede realizar muchas ventas de electrodomesticos
     public function product()
@@ -91,5 +96,13 @@ class User extends Authenticatable implements JWTSubject
         }
         // retornar el path de la imagen registrada en la BDD
         return $this->image->path;
+    }
+
+    // Función para saber si el rol que tiene asignado el usuario
+    // es el mismo que se le esta pasando a la función
+    // https://laravel.com/docs/9.x/eloquent-relationships#one-to-many
+    public function hasRole(string $role_slug)
+    {
+        return $this->role->slug === $role_slug;
     }
 }
