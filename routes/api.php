@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Account\AvatarController;
 use App\Http\Controllers\Account\ProfileController;
+use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\Product\ProductController;
 use App\Http\Controllers\UserController;
@@ -29,11 +30,27 @@ Route::post('register/', [UserController::class, 'register'])->name('register');
 // Ruta pública para el manejo de inicio de sesión del usuario
 Route::post('login/', [UserController::class, 'authenticate'])->name('login');
 
+// Ruta pública para el manejo del olvido de contraseña del usuario
+Route::post('/forgot-password', [PasswordController::class, 'resendLink'])->name('password.resend-link');
+
+// Ruta pública para la redirección del formulario y actualizar los datos
+Route::get('/reset-password/{token}', [PasswordController::class, 'redirectReset'])->name('password.reset');
+
+// Ruta pública para el manejo del reseteo de la contraseña del usuario
+Route::post('/reset-password', [PasswordController::class, 'restore'])->name('password.restore');
+
 // Ruta pública para mostrar todos los productos
 Route::get('products/', [ProductController::class, 'index']);
 
 // Rutas protegidas
 Route::group(['middleware' => ['jwt.verify']], function () {
+    
+    // Ruta para el cambio de contraseña del usuario
+    Route::post('/update-password', [PasswordController::class, 'update'])->name('password.update');
+
+    // Ruta para el cierre de sesión
+    Route::post('/logout', [UserController::class, 'logout'])->name('logout');
+
         // Se hace uso de grupo de rutas
         Route::prefix('profile')->group(function ()
         {

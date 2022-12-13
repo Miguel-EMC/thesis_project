@@ -77,4 +77,14 @@ class UserController extends Controller
         }
         return response()->json(compact('user'));
     }
+           // Función para el manejo del cierre de sesión
+           public function logout(Request $request)
+           {
+               // Se obtiene el token en el request y eliminar de la BDD
+               // https://laravel.com/api/9.x/Illuminate/Http/Request.html
+               $request->user()->tokens()->delete();
+       
+               // Se invoca a la función padre
+               return $this->sendResponse(message: 'Logged out.');
+           }  
 }
