@@ -4,12 +4,11 @@ use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\PasswordController;
 use Illuminate\Support\Facades\Route;
 
-// Ruta pública para el manejo de inicio de sesión del usuario
+// Ruta pública para el manejo de inicio de sesión del usuario admin
 Route::post('/login', [AuthController::class, 'login'])->name('login');
 
 // Ruta pública para el inicio de sesion del cliente
 Route::post('/loginCust', [AuthController::class, 'loginCust'])->name('loginCust');
-
 
 // Ruta pública para el manejo del olvido de contraseña del usuario
 Route::post('/forgot-password', [PasswordController::class, 'resendLink'])->name('password.resend-link');
