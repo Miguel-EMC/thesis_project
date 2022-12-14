@@ -36,7 +36,7 @@ class UserSeeder extends Seeder
         // Generar algunos usuarios para nuestra aplicacion
 
         $rol_admin = Role::where('name', 'admin')->first();
-        User::factory()->for($rol_admin)->count(1)->create();
+        User::factory()->for($rol_admin)->count(5)->create();
 
         $rol_customer = Role::where('name', 'customer')->first();
         // 5 usuarios que le pertenecen al rol cliente
