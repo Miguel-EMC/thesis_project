@@ -2,7 +2,11 @@
 
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\PasswordController;
+use App\Http\Controllers\Register\CustomerController;
 use Illuminate\Support\Facades\Route;
+
+// Ruta pública para el registro de usuario
+Route::post('/register', [CustomerController::class, 'register'])->name('register.cliente');
 
 // Ruta pública para el manejo de inicio de sesión del usuario admin
 Route::post('/login', [AuthController::class, 'login'])->name('login');
