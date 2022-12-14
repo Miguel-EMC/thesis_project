@@ -11,14 +11,18 @@ use Laravel\Sanctum\HasApiTokens;
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
-
     /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
+        'username',
+        'first_name',
+        'last_name',
+        'personal_phone',
+        'home_phone',
+        'address',
         'email',
         'password',
     ];
@@ -41,4 +45,18 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    // Relación de uno a muchos
+    // Un usuario le pertenece un rol
+    public function role()
+    {
+        return $this->belongsTo(Role::class);
+    }
+    // Obtener el nombre completo del usuario
+    public function getFullName()
+    {
+        return "$this->first_name $this->last_name";
+    }
+
+
 }
