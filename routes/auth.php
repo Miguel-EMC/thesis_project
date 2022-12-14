@@ -7,6 +7,10 @@ use Illuminate\Support\Facades\Route;
 // Ruta pública para el manejo de inicio de sesión del usuario
 Route::post('/login', [AuthController::class, 'login'])->name('login');
 
+// Ruta pública para el inicio de sesion del cliente
+Route::post('/loginCust', [AuthController::class, 'loginCust'])->name('loginCust');
+
+
 // Ruta pública para el manejo del olvido de contraseña del usuario
 Route::post('/forgot-password', [PasswordController::class, 'resendLink'])->name('password.resend-link');
 
@@ -15,8 +19,6 @@ Route::get('/reset-password/{token}', [PasswordController::class, 'redirectReset
 
 // Ruta pública para el manejo del reseteo de la contraseña del usuario
 Route::post('/reset-password', [PasswordController::class, 'restore'])->name('password.restore');
-
-
 
 // Grupo de rutas protegidas
 Route::middleware(['auth:sanctum'])->group(function ()
