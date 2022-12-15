@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class Product extends Model
 {
@@ -17,7 +18,17 @@ class Product extends Model
         'state',
         'delivery_method',
         'brand',
+        'categorie_id',
     ];
+
+    //Funcion para obtener el usuario que creo el producto
+    public static function boot()
+    {
+        parent::boot();
+        static::creating(function ($product) {
+            $product->user_id = Auth::id();
+        });
+    }
 
     //Relacion uno a muchos
     // Un electrodomestico le pertenece a una categoria
@@ -44,8 +55,18 @@ class Product extends Model
     
     // Relación polimórfica uno a uno
     // Un electrodomestico puede tener una imagen
-    public function image()
-    {
-        return $this->morphOne(Image::class,'imageable');
+    public function getDefaultImagenProductPath(){
+        return "https://cdn-icons-png.flaticon.com/512/1261/1261106.png";
+    }
+
+    // Obtener la imagen de la BDD
+    public function getProdcutPath(){
+        // se verifica no si existe una iamgen
+        if(!$this->image){
+            // asignarle el path de una imagen por defecto
+            return $this->getDefaultImagenProductPath();
+        }
+        // retornar el path de la imagen registrada en la BDD
+        return $this->image->path;
     }
 }
