@@ -20,7 +20,7 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'email', 'username', 'first_name', 'last_name', 'personal_phone', 'home_phone',
-        'address', 'password', 'birthdate',
+        'address', 'password',
     ];
 
     /**
@@ -76,5 +76,25 @@ class User extends Authenticatable
     public function hasRole(string $role_slug)
     {
         return $this->role->slug === $role_slug;
+    }
+
+    // Relación uno a muchos
+    // Un usuario puede tener muchos comentarios
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
+
+    // Relación uno a muchos
+    // Un usuario puede tener muchos reportes
+    public function reports()
+    {
+        return $this->hasMany(Report::class);
+    }
+    // Relación uno a muchos
+    // Un usuario puede tener muchos electrodomesticos
+    public function products()
+    {
+        return $this->hasMany(Product::class);
     }
 }

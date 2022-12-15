@@ -31,7 +31,6 @@ return new class extends Migration
   
               // columnas que seran podran aceptar regitros null para la tabla de la BDD
               $table->string('home_phone', 9)->nullable();
-              $table->date('birthdate')->nullable();
               $table->timestamp('email_verified_at')->nullable();
   
               // columnas especiales para la tabla de la BDD
