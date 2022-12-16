@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Account\AvatarController;
 use App\Http\Controllers\Account\ProfileController;
+use App\Http\Controllers\Api\Comment\CommentController;
 use App\Http\Controllers\Api\Product\ProductController;
 use App\Models\Role;
 use Illuminate\Support\Facades\Route;
@@ -33,6 +34,13 @@ use Illuminate\Support\Facades\Route;
                 Route::get('/{product}', 'show')->name('products.show');
                 Route::put('/{product}', 'update')->name('products.update');
                 Route::delete('/{product}', 'destroy')->name('products.destroy');
+            });
+            Route::controller(CommentController::class)->group(function(){
+                Route::get('/{product}/comments', 'index')->name('products.comments.index');
+                Route::post('/{product}/comments', 'store')->name('products.comments.store');
+                Route::get('/{product}/comments/{comment}', 'show')->name('products.comments.show');
+                Route::put('/{product}/comments/{comment}', 'update')->name('products.comments.update');
+                Route::delete('/{product}/comments/{comment}', 'destroy')->name('products.comments.destroy');
             });
             // Route::get('search/{title}', [ProductController::class, 'search'])->name('products.search');
             // Route::get('filter/{categorie}', [ProductController::class, 'filter'])->name('products.filter');

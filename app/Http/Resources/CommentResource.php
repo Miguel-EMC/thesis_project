@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Auth;
 
 class CommentResource extends JsonResource
 {
@@ -19,7 +20,8 @@ class CommentResource extends JsonResource
             'id' => $this->id,
             'comment' => $this->comment,
             'product_id' => $this->product_id,
-            'user_id' => $this->user_id->name,
+            'user_id' => $this->user_id,
+            'user name' => $this->user->username,
         ];
     }
 }

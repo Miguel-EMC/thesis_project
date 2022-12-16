@@ -6,7 +6,7 @@ use App\Http\Controllers\Register\CustomerController;
 use Illuminate\Support\Facades\Route;
 
 // Ruta pública para el registro de usuario
-Route::post('/register', [CustomerController::class, 'register'])->name('register.cliente');
+Route::post('/register', [CustomerController::class, 'register'])->name('register');
 
 // Ruta pública para el manejo de inicio de sesión del usuario admin
 Route::post('/login', [AuthController::class, 'login'])->name('login');
