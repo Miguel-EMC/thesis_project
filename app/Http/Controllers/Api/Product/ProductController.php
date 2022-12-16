@@ -89,40 +89,44 @@ class ProductController extends Controller
         ]);
     }
 
-    // //Funcion para buscar un producto
-    // public function search(Request $request)
-    // {
-    //     $products = Product::where('title', 'like', '%' . $request->name . '%')->get();
-    //     return response()->json($products, 200);
-    // }
-    // //Funcion para filtrar productos
-    // public function filter(Request $request)
-    // {
-    //     $query_products = Product::query();
+    //Funcion para buscar un producto
+    public function search(Request $request)
+    {
+        $search = $request->search;
+        $products = Product::where('title', 'like', '%' . $search . '%')
+                                  ->latest('id');
+                                  
+        return response()->json($products, 200);
+    }
 
-    //     if ($request->has('price_min')) {
-    //         $query_products->where('price_min', '>=', $request->price_min);
-    //     }
-    //     if ($request->has('price_max')) {
-    //         $query_products->where('price_max', '<=', $request->price_max);
-    //     }
-    //     if ($request->has('state_appliance')) {
-    //         $query_products->where('state_appliance', '=', $request->state_appliance);
-    //     }
-    //     if ($request->has('delivery_method')) {
-    //         $query_products->where('delivery_method', '=', $request->delivery_method);
-    //     }
-    //     if ($request->has('brand')) {
-    //         $query_products->where('brand', '=', $request->brand);
-    //     }
-    //     if ($request->has('categorie_id')) {
-    //         $query_products->where('categorie_id', '=', $request->categorie_id);
-    //     }
-    //     if ($request->has('user_id')) {
-    //         $query_products->where('user_id', '=', $request->user_id);
-    //     }
-    //     $products = $query_products->get();
-    //     return response()->json($products, 200);
-    // }
+    //Funcion para filtrar productos
+    public function filter(Request $request)
+    {
+        $query_products = Product::query();
+
+        if ($request->has('price_min')) {
+            $query_products->where('price_min', '>=', $request->price_min);
+        }
+        if ($request->has('price_max')) {
+            $query_products->where('price_max', '<=', $request->price_max);
+        }
+        if ($request->has('state_appliance')) {
+            $query_products->where('state_appliance', '=', $request->state_appliance);
+        }
+        if ($request->has('delivery_method')) {
+            $query_products->where('delivery_method', '=', $request->delivery_method);
+        }
+        if ($request->has('brand')) {
+            $query_products->where('brand', '=', $request->brand);
+        }
+        if ($request->has('categorie_id')) {
+            $query_products->where('categorie_id', '=', $request->categorie_id);
+        }
+        if ($request->has('user_id')) {
+            $query_products->where('user_id', '=', $request->user_id);
+        }
+        $products = $query_products->get();
+        return response()->json($products, 200);
+    }
 
 }

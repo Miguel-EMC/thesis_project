@@ -77,6 +77,7 @@ class CommentController extends Controller
         $comment->delete();
         return $this->sendResponse(
             message: "Comment deleted successfully",
+            result: []
         );
     }
 }
