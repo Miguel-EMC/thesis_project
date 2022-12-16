@@ -56,6 +56,7 @@ class Product extends Model
     // Relación polimórfica uno a uno
     // Un electrodomestico puede tener una imagen
     public function getDefaultImagenProductPath(){
+        // retornar el path de la imagen por defecto
         return "https://cdn-icons-png.flaticon.com/512/1261/1261106.png";
     }
 
