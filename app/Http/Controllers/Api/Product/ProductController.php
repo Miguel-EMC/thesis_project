@@ -7,15 +7,24 @@ use App\Http\Resources\ProductResource;
 use Illuminate\Http\Request;
 use App\Http\Resources\ProductCollection;
 use App\Models\Product;
+use Illuminate\Support\Facades\Gate;
 
 class ProductController extends Controller
 {
+
+    //Funcion para verificar si el usuario tiene permiso para acceder a los productos
+    //Se verifica si el usuario tiene el rol de customer
+    //Si el usuario no tiene el rol de customer se le deniega el acceso
+    //Si el usuario tiene el rol de customer se le permite el acceso
+    public function __construct()
+    {
+        $this->middleware('can:manage-product');
+    }
 
     //Funcion para mostrar todos los productos de la base de datos
     public function index()
     {
         //Se obtiene todos los productos de la base de datos
-
         //Se invoca a la funcion padre
         return $this->sendResponse(
         message: "Products returned successfully",
@@ -38,50 +47,77 @@ class ProductController extends Controller
             ]
         );
     }
-
     //Funcion para crear un producto
     public function store(Request $request)
     {
-        $request->validate([
-            'title' => 'required|max:255',
-            'price' => 'required|numeric',
-            'detail' => 'required',
-            'stock' => 'required|numeric',
-            'state_appliance' => 'required|max:255',
-            'delivery_method' => 'required|max:255',
-            'brand' => 'required',
-            'categorie_id' => 'required|exists:categories,id',
-        ]);
-        //Se crea el producto
-        return response()->json([
-            'message' => 'Product created successfully',
-            'product' => Product::create($request->all())
-        ]);
+        $response = Gate::inspect('create', Product::class);
+
+        if ($response->allowed()) {
+        //Se valida la informacion del producto
+            $request->validate([
+                'title' => 'required|max:255',
+                'price' => 'required|numeric',
+                'detail' => 'required',
+                'stock' => 'required|numeric',
+                'state_appliance' => 'required|max:255',
+                'delivery_method' => 'required|max:255',
+                'brand' => 'required',
+                'categorie_id' => 'required|exists:categories,id',
+            ]);
+            //Se crea el producto
+            return response()->json([
+                'message' => 'Product created successfully',
+                'product' => Product::create($request->all())
+            ]);
+        } else {
+            return $this->sendError(
+                message: 'You are not allowed to create products.',
+                Result: [
+                    'product' => $response->message(),
+                ],
+                code: 403
+            );
+        }
     }
 
     //Funcion para actualizar un producto
     public function update(Request $request, Product $product)
     {
-        $request->validate([
-            'title' => 'required|max:255',
-            'price_min' => 'required|numeric',
-            'price_max' => 'required|numeric',
-            'detail' => 'required',
-            'stock' => 'required|numeric',
-            'state_appliance' => 'required|max:255',
-            'delivery_method' => 'required|max:255',
-            'brand' => 'required',
-            'categorie_id' => 'required|exists:categories,id',
-        ]);
-        //Se actualiza el producto
-        return response()->json([
-            'message' => 'Product updated successfully',
-            'product' => $product->update($request->all())
-        ]);
+        $response = Gate::inspect('update', $product);
+
+        if ($response->allowed()) {
+
+            $request->validate([
+                'title' => 'required|max:255',
+                'price_min' => 'required|numeric',
+                'price_max' => 'required|numeric',
+                'detail' => 'required',
+                'stock' => 'required|numeric',
+                'state_appliance' => 'required|max:255',
+                'delivery_method' => 'required|max:255',
+                'brand' => 'required',
+                'categorie_id' => 'required|exists:categories,id',
+            ]);
+            //Se actualiza el producto
+            return response()->json([
+                'message' => 'Product updated successfully',
+                'product' => $product->update($request->all())
+            ]);
+        } else {
+            return response()->json([
+                'message' => $response->message(),
+            ], 403);
+        }
     }
 
     public function destroy(Product $product)
     {
+        $response = Gate::inspect('delete', $product);
+        if ($response->denied()) {
+            return response()->json([
+                'message' => $response->message(),
+            ], 403);
+        }
         //Se elimina el producto
         return response()->json([
             'message' => 'Product deleted successfully',
@@ -94,8 +130,8 @@ class ProductController extends Controller
     {
         $search = $request->search;
         $products = Product::where('title', 'like', '%' . $search . '%')
-                                  ->latest('id');
-                                  
+            ->latest('id');
+
         return response()->json($products, 200);
     }
 

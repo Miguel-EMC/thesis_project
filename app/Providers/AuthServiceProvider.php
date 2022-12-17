@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Models\Product;
+use App\Models\User;
 use App\Policies\ProductPolicy;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
@@ -9,7 +11,7 @@ use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvid
 class AuthServiceProvider extends ServiceProvider
 {
     protected $policies = [
-        ProductPolicy::class => ProductPolicy::class,
+        Product::class => ProductPolicy::class,
     ];
 
     
@@ -17,8 +19,9 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        Gate::define('update-product', function ($user, $product) {
-            return $user->id === $product->user_id;
+        // Gestion de productos por parte del usuario con rol customer
+        Gate::define('manage-product',function (User $user){
+            return $user->role->slug === "customer";
         });
     }
 }
