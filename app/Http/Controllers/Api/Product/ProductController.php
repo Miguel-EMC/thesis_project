@@ -110,6 +110,7 @@ class ProductController extends Controller
         }
     }
 
+    //Funcion para eliminar un producto
     public function destroy(Product $product)
     {
         $response = Gate::inspect('delete', $product);
