@@ -6,33 +6,30 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 
-class Report extends Model
+class Message extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'title',
-        'description',
+        'message',
     ];
-
-    // Funcion para obtener el usuario que creo el reporte
     public static function boot()
     {
         parent::boot();
-        static::creating(function ($report) {
-            $report->user_id = Auth::id();
+        static::creating(function ($message) {
+            $message->user_id = Auth::id();
         });
     }
-
-    // Relación polimórfica uno a muchos
-    // Un reporte puede tener muchos usuarios
+    //Relación
+    //un mensaje pertenece a un user y un user puede tener muchos mensajes
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 
-    // Relación polimórfica uno a muchos
-    public function products()
+    //Relación
+    //un mensaje pertenece a un producto y un producto puede tener muchos mensajes
+    public function product()
     {
         return $this->belongsTo(Product::class);
     }

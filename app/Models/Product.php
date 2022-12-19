@@ -70,4 +70,9 @@ class Product extends Model
         // retornar el path de la imagen registrada en la BDD
         return $this->image->path;
     }
+    // Relación uno a muchos
+    // Un electrodomestico puede tener muchos mensajes
+    public function messages(){
+        return $this->hasMany(Message::class);
+    }
 }
