@@ -129,41 +129,54 @@ class ProductController extends Controller
     //Funcion para buscar un producto
     public function search(Request $request)
     {
-        $search = $request->search;
-        $products = Product::where('title', 'like', '%' . $search . '%')
-            ->latest('id');
-
-        return response()->json($products, 200);
+        //Se valida la informacion del producto
+        $request->validate([
+            'title' => 'required|max:255',
+        ]);
+        //Se busca el producto
+        $product = Product::where('title', 'like', '%' . $request->title . '%')->get();
+        //Se invoca a la funcion padre
+        return $this->sendResponse(
+        message: "Product returned successfully",
+        result: [
+                'product' => new ProductCollection($product),
+            ]
+        );
     }
 
     //Funcion para filtrar productos
-    public function filter(Request $request)
+    public function filter(Request $request, Product $product)
     {
-        $query_products = Product::query();
-
-        if ($request->has('price_min')) {
-            $query_products->where('price_min', '>=', $request->price_min);
+        if ($request->id){
+            $product = $product->where('id', $request->id);
         }
-        if ($request->has('price_max')) {
-            $query_products->where('price_max', '<=', $request->price_max);
+        if ($request->title){
+            $product = $product->where('title', $request->title);
         }
-        if ($request->has('state_appliance')) {
-            $query_products->where('state_appliance', '=', $request->state_appliance);
+        if ($request->price_min){
+            $product = $product->where('price', '>=', $request->price_min);
         }
-        if ($request->has('delivery_method')) {
-            $query_products->where('delivery_method', '=', $request->delivery_method);
+        if ($request->price_max){
+            $product = $product->where('price', '<=', $request->price_max);
         }
-        if ($request->has('brand')) {
-            $query_products->where('brand', '=', $request->brand);
+        if ($request->stock){
+            $product = $product->where('stock', $request->stock);
         }
-        if ($request->has('categorie_id')) {
-            $query_products->where('categorie_id', '=', $request->categorie_id);
+        if ($request->state_appliance){
+            $product = $product->where('state_appliance', $request->state_appliance);
         }
-        if ($request->has('user_id')) {
-            $query_products->where('user_id', '=', $request->user_id);
+        if ($request->delivery_method){
+            $product = $product->where('delivery_method', $request->delivery_method);
         }
-        $products = $query_products->get();
-        return response()->json($products, 200);
+        if ($request->brand){
+            $product = $product->where('brand', $request->brand);
+        }
+        if ($request->categorie_id){
+            $product = $product->where('categorie_id', $request->categorie_id);
+        }
+        return response()->json([
+            'message' => 'Product filtered successfully',
+            'product' => $product->get()
+        ]);
     }
-
 }
