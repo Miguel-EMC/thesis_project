@@ -174,9 +174,12 @@ class ProductController extends Controller
         if ($request->categorie_id){
             $product = $product->where('categorie_id', $request->categorie_id);
         }
-        return response()->json([
-            'message' => 'Product filtered successfully',
-            'product' => $product->get()
-        ]);
+        //Se invoca a la funcion padre
+        return $this->sendResponse(
+            message: "Product filtered successfully",
+            result: [
+                    'product' => $product->get(),
+                ]
+            );
     }
 }
