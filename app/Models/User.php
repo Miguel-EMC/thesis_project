@@ -71,20 +71,13 @@ class User extends Authenticatable
         return $this->image->path;
     }
 
-    // Función para saber si el rol que tiene asignado el usuario
-    // es el mismo que se le esta pasando a la función
-    public function hasRole(string $role_slug)
-    {
-        return $this->role->slug === $role_slug;
-    }
-
     // Relación uno a muchos
     // Un usuario puede tener muchos comentarios
     public function comments()
     {
         return $this->hasMany(Comment::class);
     }
-
+    
     // Relación uno a muchos
     // Un usuario puede tener muchos reportes
     public function reports()
@@ -96,5 +89,11 @@ class User extends Authenticatable
     public function products()
     {
         return $this->hasMany(Product::class);
+    }
+    // Función para saber si el rol que tiene asignado el usuario
+    // es el mismo que se le esta pasando a la función
+    public function hasRole(string $role_slug)
+    {
+        return $this->role->slug === $role_slug;
     }
 }
