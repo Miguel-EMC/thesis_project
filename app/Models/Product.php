@@ -19,6 +19,7 @@ class Product extends Model
         'delivery_method',
         'brand',
         'categorie_id',
+        'image',
     ];
 
     //Funcion para obtener el usuario que creo el producto
@@ -51,23 +52,5 @@ class Product extends Model
     // Un electrodomestico puede tener muchos usuarios
     public function users(){
         return $this->belongsToMany(User::class);
-    }
-    
-    // Relación polimórfica uno a uno
-    // Un electrodomestico puede tener una imagen
-    public function getDefaultImagenProductPath(){
-        // retornar el path de la imagen por defecto
-        return "https://cdn-icons-png.flaticon.com/512/1261/1261106.png";
-    }
-
-    // Obtener la imagen de la BDD
-    public function getProdcutPath(){
-        // se verifica no si existe una iamgen
-        if(!$this->image){
-            // asignarle el path de una imagen por defecto
-            return $this->getDefaultImagenProductPath();
-        }
-        // retornar el path de la imagen registrada en la BDD
-        return $this->image->path;
-    }
+    } 
 }
