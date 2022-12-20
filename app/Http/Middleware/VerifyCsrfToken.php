@@ -15,7 +15,8 @@ class VerifyCsrfToken extends Middleware
      */
         // protected $urlFron = env('APP_URL');
 
-        protected $except = [];
+        protected $except = [
+        ];
 
         public function __construct(Application $app, Encrypter $encrypter)
         {

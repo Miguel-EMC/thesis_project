@@ -47,8 +47,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
                         Route::delete('/{product}/comments/{comment}', 'destroy')->name('products.comments.destroy');
                     }
             );
-            Route::get('search/{title}', [ProductController::class, 'search'])->name('products.search');
-            Route::get('filter/{categorie}', [ProductController::class, 'filter'])->name('products.filter');
+            Route::post('search', [ProductController::class, 'search'])->name('products.search');
+            Route::post('filter', [ProductController::class, 'filter'])->name('products.filter');
 
             // Se hace uso de grupo de rutas para reportes
             Route::controller(ReportController::class)->group(

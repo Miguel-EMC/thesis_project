@@ -7,15 +7,24 @@ use App\Http\Resources\ProductResource;
 use Illuminate\Http\Request;
 use App\Http\Resources\ProductCollection;
 use App\Models\Product;
+use Illuminate\Support\Facades\Gate;
 
 class ProductController extends Controller
 {
+
+    //Funcion para verificar si el usuario tiene permiso para acceder a los productos
+    //Se verifica si el usuario tiene el rol de customer
+    //Si el usuario no tiene el rol de customer se le deniega el acceso
+    //Si el usuario tiene el rol de customer se le permite el acceso
+    public function __construct()
+    {
+        $this->middleware('can:manage-product');
+    }
 
     //Funcion para mostrar todos los productos de la base de datos
     public function index()
     {
         //Se obtiene todos los productos de la base de datos
-
         //Se invoca a la funcion padre
         return $this->sendResponse(
         message: "Products returned successfully",
@@ -38,50 +47,78 @@ class ProductController extends Controller
             ]
         );
     }
-
     //Funcion para crear un producto
     public function store(Request $request)
     {
-        $request->validate([
-            'title' => 'required|max:255',
-            'price' => 'required|numeric',
-            'detail' => 'required',
-            'stock' => 'required|numeric',
-            'state_appliance' => 'required|max:255',
-            'delivery_method' => 'required|max:255',
-            'brand' => 'required',
-            'categorie_id' => 'required|exists:categories,id',
-        ]);
-        //Se crea el producto
-        return response()->json([
-            'message' => 'Product created successfully',
-            'product' => Product::create($request->all())
-        ]);
+        $response = Gate::inspect('create', Product::class);
+
+        if ($response->allowed()) {
+        //Se valida la informacion del producto
+            $request->validate([
+                'title' => 'required|max:255',
+                'price' => 'required|numeric',
+                'detail' => 'required',
+                'stock' => 'required|numeric',
+                'state_appliance' => 'required|max:255',
+                'delivery_method' => 'required|max:255',
+                'brand' => 'required',
+                'categorie_id' => 'required|exists:categories,id',
+            ]);
+            //Se crea el producto
+            return response()->json([
+                'message' => 'Product created successfully',
+                'product' => Product::create($request->all())
+            ]);
+        } else {
+            return $this->sendError(
+                message: 'You are not allowed to create products.',
+                Result: [
+                    'product' => $response->message(),
+                ],
+                code: 403
+            );
+        }
     }
 
     //Funcion para actualizar un producto
     public function update(Request $request, Product $product)
     {
-        $request->validate([
-            'title' => 'required|max:255',
-            'price_min' => 'required|numeric',
-            'price_max' => 'required|numeric',
-            'detail' => 'required',
-            'stock' => 'required|numeric',
-            'state_appliance' => 'required|max:255',
-            'delivery_method' => 'required|max:255',
-            'brand' => 'required',
-            'categorie_id' => 'required|exists:categories,id',
-        ]);
-        //Se actualiza el producto
-        return response()->json([
-            'message' => 'Product updated successfully',
-            'product' => $product->update($request->all())
-        ]);
+        $response = Gate::inspect('update', $product);
+
+        if ($response->allowed()) {
+
+            $request->validate([
+                'title' => 'required|max:255',
+                'price_min' => 'required|numeric',
+                'price_max' => 'required|numeric',
+                'detail' => 'required',
+                'stock' => 'required|numeric',
+                'state_appliance' => 'required|max:255',
+                'delivery_method' => 'required|max:255',
+                'brand' => 'required',
+                'categorie_id' => 'required|exists:categories,id',
+            ]);
+            //Se actualiza el producto
+            return response()->json([
+                'message' => 'Product updated successfully',
+                'product' => $product->update($request->all())
+            ]);
+        } else {
+            return response()->json([
+                'message' => $response->message(),
+            ], 403);
+        }
     }
 
+    //Funcion para eliminar un producto
     public function destroy(Product $product)
     {
+        $response = Gate::inspect('delete', $product);
+        if ($response->denied()) {
+            return response()->json([
+                'message' => $response->message(),
+            ], 403);
+        }
         //Se elimina el producto
         return response()->json([
             'message' => 'Product deleted successfully',
@@ -92,41 +129,57 @@ class ProductController extends Controller
     //Funcion para buscar un producto
     public function search(Request $request)
     {
-        $search = $request->search;
-        $products = Product::where('title', 'like', '%' . $search . '%')
-                                  ->latest('id');
-                                  
-        return response()->json($products, 200);
+        //Se valida la informacion del producto
+        $request->validate([
+            'title' => 'required|max:255',
+        ]);
+        //Se busca el producto
+        $product = Product::where('title', 'like', '%' . $request->title . '%')->get();
+        //Se invoca a la funcion padre
+        return $this->sendResponse(
+        message: "Product returned successfully",
+        result: [
+                'product' => new ProductCollection($product),
+            ]
+        );
     }
 
     //Funcion para filtrar productos
-    public function filter(Request $request)
+    public function filter(Request $request, Product $product)
     {
-        $query_products = Product::query();
-
-        if ($request->has('price_min')) {
-            $query_products->where('price_min', '>=', $request->price_min);
+        if ($request->id){
+            $product = $product->where('id', $request->id);
         }
-        if ($request->has('price_max')) {
-            $query_products->where('price_max', '<=', $request->price_max);
+        if ($request->title){
+            $product = $product->where('title', $request->title);
         }
-        if ($request->has('state_appliance')) {
-            $query_products->where('state_appliance', '=', $request->state_appliance);
+        if ($request->price_min){
+            $product = $product->where('price', '>=', $request->price_min);
         }
-        if ($request->has('delivery_method')) {
-            $query_products->where('delivery_method', '=', $request->delivery_method);
+        if ($request->price_max){
+            $product = $product->where('price', '<=', $request->price_max);
         }
-        if ($request->has('brand')) {
-            $query_products->where('brand', '=', $request->brand);
+        if ($request->stock){
+            $product = $product->where('stock', $request->stock);
         }
-        if ($request->has('categorie_id')) {
-            $query_products->where('categorie_id', '=', $request->categorie_id);
+        if ($request->state_appliance){
+            $product = $product->where('state_appliance', $request->state_appliance);
         }
-        if ($request->has('user_id')) {
-            $query_products->where('user_id', '=', $request->user_id);
+        if ($request->delivery_method){
+            $product = $product->where('delivery_method', $request->delivery_method);
         }
-        $products = $query_products->get();
-        return response()->json($products, 200);
+        if ($request->brand){
+            $product = $product->where('brand', $request->brand);
+        }
+        if ($request->categorie_id){
+            $product = $product->where('categorie_id', $request->categorie_id);
+        }
+        //Se invoca a la funcion padre
+        return $this->sendResponse(
+            message: "Product filtered successfully",
+            result: [
+                    'product' => $product->get(),
+                ]
+            );
     }
-
 }

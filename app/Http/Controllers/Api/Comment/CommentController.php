@@ -7,9 +7,21 @@ use App\Http\Resources\CommentResource;
 use App\Models\Comment;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class CommentController extends Controller
 {
+    //Funcion para verificar si el usuario tiene permiso para acceder a los comentarios
+    //Se verifica si el usuario tiene el rol de customer
+    //Si el usuario no tiene el rol de customer se le deniega el acceso
+    //Si el usuario tiene el rol de customer se le permite el acceso
+    public function __construct()
+    {
+        $this->middleware('can:create-comment');
+
+        $this->authorizeResource(Comment::class, 'comment');
+    }
+
     //Funcion para mostrar todos los comentarios  de un producto
     // Se recibe como parametro el id del producto
     public function index(Product $product)
@@ -40,18 +52,20 @@ class CommentController extends Controller
     // Se recibe como parametro el id del producto y los datos del comentario
     public function store(Request $request, Product $product)
     {
-        $request->validate([
-            'comment' => 'required|string'
-        ]);
 
-        $comment = $product->comments()->save(new Comment($request->all()));
-        return $this->sendResponse(
-            message: "Comment created successfully",
-            result: [
-                'comment' => new CommentResource($comment)
-            ]
-        );
+            $request->validate([
+                'comment' => 'required|string'
+            ]);
+    
+            $comment = $product->comments()->save(new Comment($request->all()));
+            return $this->sendResponse(
+                message: "Comment created successfully",
+                result: [
+                    'comment' => new CommentResource($comment)
+                ]
+            );
     }
+    
     //Funcion para actualizar un comentario
     // Se recibe como parametro el id del producto y el id del comentario
     public function update(Request $request, Product $product, Comment $comment)
