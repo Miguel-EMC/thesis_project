@@ -52,5 +52,4 @@ class Product extends Model
     // Un electrodomestico puede tener muchos usuarios
     public function users(){
         return $this->belongsToMany(User::class);
-    } 
-}
+    }
