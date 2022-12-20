@@ -96,4 +96,11 @@ class User extends Authenticatable
     {
         return $this->role->slug === $role_slug;
     }
+
+    // Relación uno a muchos
+    // Un usuario puede tener muchos mensajes
+    public function messages()
+    {
+        return $this->hasMany(Message::class);
+    }
 }

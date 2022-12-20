@@ -2,10 +2,10 @@
 
 use App\Http\Controllers\Account\AvatarController;
 use App\Http\Controllers\Account\ProfileController;
+use App\Http\Controllers\Api\Chat\ChatController;
 use App\Http\Controllers\Api\Comment\CommentController;
 use App\Http\Controllers\Api\Product\ProductController;
 use App\Http\Controllers\Api\Report\ReportController;
-use App\Models\Role;
 use Illuminate\Support\Facades\Route;
 
 // Hacer uso del archivo auth.php
@@ -34,6 +34,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
                         Route::get('/', 'index')->name('products.index');
                         Route::post('/', 'store')->name('products.store');
                         Route::get('/{product}', 'show')->name('products.show');
+                        Route::get('/{product}/image', 'image')->name('products.image');
                         Route::put('/{product}', 'update')->name('products.update');
                         Route::delete('/{product}', 'destroy')->name('products.destroy');
                     }
@@ -57,6 +58,14 @@ Route::middleware(['auth:sanctum'])->group(function () {
                         Route::get('/{product}/reports/{report}', 'show')->name('products.reports.show');
                         Route::post('/{product}/reports', 'store')->name('products.reports.store');
                         Route::delete('/{product}/reports/{report}', 'destroy')->name('products.reports.destroy');
+                }
+            );
+
+            // Se hace uso de grupo de rutas para el chat
+            Route::controller(ChatController::class)->group(
+                function () {
+                    Route::get('/{product}', 'chat')->name('products.chat');
+                    Route::post('/{product}/chat', 'store')->name('products.chat.store');
                 }
             );
         }

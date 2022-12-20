@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Http\Resources\ProductCollection;
 use App\Models\Product;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
@@ -63,12 +64,20 @@ class ProductController extends Controller
                 'delivery_method' => 'required|max:255',
                 'brand' => 'required',
                 'categorie_id' => 'required|exists:categories,id',
+                'image' => 'required|image| mimes:jpg,png,jpeg|max:512'
             ]);
+
             //Se crea el producto
-            return response()->json([
-                'message' => 'Product created successfully',
-                'product' => Product::create($request->all())
-            ]);
+            $product = new Product($request->all());
+            $path = $request->file('image')->store('products', 'dropbox');
+            $product->image = $path;
+            $product->save();
+            return $this->sendResponse(
+                message: 'Product created successfully',
+                result: [
+                    'product' => new ProductResource($product),
+                ]
+            );
         } else {
             return $this->sendError(
                 message: 'You are not allowed to create products.',
@@ -78,6 +87,12 @@ class ProductController extends Controller
                 code: 403
             );
         }
+    }
+    //Funcion para obligar a descargar una imagen de un producto
+    public function image(Product $product)
+    {
+        //retorna la imagen del producto de la base de datos en formato de descarga
+        return Storage::disk('dropbox')->download($product->image);
     }
 
     //Funcion para actualizar un producto
@@ -89,8 +104,7 @@ class ProductController extends Controller
 
             $request->validate([
                 'title' => 'required|max:255',
-                'price_min' => 'required|numeric',
-                'price_max' => 'required|numeric',
+                'price' => 'required|numeric',
                 'detail' => 'required',
                 'stock' => 'required|numeric',
                 'state_appliance' => 'required|max:255',
