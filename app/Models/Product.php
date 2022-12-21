@@ -33,23 +33,29 @@ class Product extends Model
 
     //Relacion uno a muchos
     // Un electrodomestico le pertenece a una categoria
-    public function categorie(){
+    public function categorie()
+    {
         return $this->belongsTo(Categorie::class);
     }
+    
     // Relación uno a muchos
     // Un electrodomestico puede tener muchos comentarios
-    public function comments(){
+    public function comments()
+    {
         return $this->hasMany(Comment::class);
     }
 
     // Relación uno a muchos
     // Un electrodomestico puede tener muchos reportes
-    public function reports(){
+    public function reports()
+    {
         return $this->hasMany(Report::class);
     }
 
     // Relación uno a muchos
     // Un electrodomestico puede tener muchos usuarios
-    public function users(){
+    public function users()
+    {
         return $this->belongsToMany(User::class);
     }
+}

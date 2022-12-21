@@ -19,8 +19,8 @@ class CommentFactory extends Factory
     {
         return [
             'comment' => $this->faker->sentence,
-            'user_id' => random_int(5, 20),
-            'product_id' => random_int(1, 100),
+            'user_id' => random_int(6, 20),
+            'product_id' => random_int(1, 85),
         ];
     }
 }

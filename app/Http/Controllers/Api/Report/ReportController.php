@@ -31,9 +31,7 @@ class ReportController extends Controller
     // Se recibe como parametro el id del producto y el id del reporte 
     public function show(Product $product, Report $report)
     {
-        $response = Gate::inspect('viewAny', $report);
-
-        if ($response->allowed()) {
+            $this->authorize('viewAny', Report::class);
 
             $report = $product->reports()->where('id', $report->id)->firstOrFail();
             return $this->sendResponse(
@@ -42,12 +40,6 @@ class ReportController extends Controller
                     'report' => new ReportResource($report)
                 ]
             );
-        } else {
-            return $this->sendError(
-            message: "You are not authorized to view this report",
-            code: 403
-            );
-        }
     }
 
     //Funcion para crear un reporte

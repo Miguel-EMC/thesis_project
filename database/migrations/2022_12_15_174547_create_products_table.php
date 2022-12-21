@@ -34,6 +34,9 @@ return new class extends Migration {
             // marca del electrodomestico
             $table->string('brand', 50)->nullable();
 
+            // columna para la imagen del electrodomestico
+            $table->string('image');
+
             // Un usuario puede tener uno o mas publicaciones de venta de electrodometios y un electrodomestico solo puede tener un usuario.
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')

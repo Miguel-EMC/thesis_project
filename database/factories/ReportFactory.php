@@ -19,8 +19,8 @@ class ReportFactory extends Factory
         return [
             'title' => $this->faker->sentence,
             'description' => $this->faker->paragraph,
-            'user_id' => random_int(5, 20),
-            'product_id' => random_int(1, 100),
+            'user_id' => random_int(6, 20),
+            'product_id' => random_int(1, 85),
         ];
     }
 }

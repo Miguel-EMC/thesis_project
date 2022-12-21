@@ -19,8 +19,9 @@ class ReportResource extends JsonResource
             'id' => $this->id,
             'title' => $this->title,
             'description' => $this->description,
-            'user_id' => $this->user_id,
             'product_id' => $this->product_id,
+            'user_id' => $this->user_id,
+            'user name' => $this->user->username,
         ];
     }
 }

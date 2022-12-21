@@ -7,7 +7,6 @@ use App\Http\Resources\CommentResource;
 use App\Models\Comment;
 use App\Models\Product;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Gate;
 
 class CommentController extends Controller
 {
@@ -28,7 +27,8 @@ class CommentController extends Controller
     {
         //Se retorna la coleccion de comentarios del producto
         return $this->sendResponse(
-            message: "Comments returned successfully",
+            message: "Comments returned successfully", 
+            code: 200,
             result: [
                 'comments' => CommentResource::collection($product->comments->sortByDesc('created_at'))
             ]
@@ -42,6 +42,7 @@ class CommentController extends Controller
         $comment = $product->comments()->where('id', $comment->id)->firstOrFail();
         return $this->sendResponse(
             message: "Comment returned successfully",
+            code: 200,
             result: [
                 'comment' => new CommentResource($comment)
             ]
@@ -60,6 +61,7 @@ class CommentController extends Controller
             $comment = $product->comments()->save(new Comment($request->all()));
             return $this->sendResponse(
                 message: "Comment created successfully",
+                code: 201,
                 result: [
                     'comment' => new CommentResource($comment)
                 ]
@@ -77,6 +79,7 @@ class CommentController extends Controller
         $comment->update($request->all());
         return $this->sendResponse(
             message: "Comment updated successfully",
+            code: 200,
             result: [
                 'comment' => new CommentResource($comment)
             ]
@@ -91,6 +94,7 @@ class CommentController extends Controller
         $comment->delete();
         return $this->sendResponse(
             message: "Comment deleted successfully",
+            code: 200,
             result: []
         );
     }

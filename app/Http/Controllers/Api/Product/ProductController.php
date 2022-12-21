@@ -30,7 +30,7 @@ class ProductController extends Controller
         return $this->sendResponse(
         message: "Products returned successfully",
         result: [
-                'products' => new ProductCollection(Product::paginate(5)),
+                'products' => new ProductCollection(Product::all()),
             ]
         );
     }
@@ -51,9 +51,6 @@ class ProductController extends Controller
     //Funcion para crear un producto
     public function store(Request $request)
     {
-        $response = Gate::inspect('create', Product::class);
-
-        if ($response->allowed()) {
         //Se valida la informacion del producto
             $request->validate([
                 'title' => 'required|max:255',
@@ -78,15 +75,6 @@ class ProductController extends Controller
                     'product' => new ProductResource($product),
                 ]
             );
-        } else {
-            return $this->sendError(
-                message: 'You are not allowed to create products.',
-                Result: [
-                    'product' => $response->message(),
-                ],
-                code: 403
-            );
-        }
     }
     //Funcion para obligar a descargar una imagen de un producto
     public function image(Product $product)
@@ -113,10 +101,13 @@ class ProductController extends Controller
                 'categorie_id' => 'required|exists:categories,id',
             ]);
             //Se actualiza el producto
-            return response()->json([
-                'message' => 'Product updated successfully',
-                'product' => $product->update($request->all())
-            ]);
+            return $this->sendResponse(
+                message: 'Product updated successfully',
+                code: 200,
+                result: [
+                    'product' => new ProductResource($product->update($request->all())),
+                ]
+            );
         } else {
             return response()->json([
                 'message' => $response->message(),
@@ -127,17 +118,16 @@ class ProductController extends Controller
     //Funcion para eliminar un producto
     public function destroy(Product $product)
     {
-        $response = Gate::inspect('delete', $product);
-        if ($response->denied()) {
-            return response()->json([
-                'message' => $response->message(),
-            ], 403);
-        }
+       $this->authorize('delete', $product);
         //Se elimina el producto
-        return response()->json([
-            'message' => 'Product deleted successfully',
-            'product' => $product->delete()
-        ]);
+        $product->delete();
+        //Se invoca a la funcion padre
+        return $this->sendResponse(
+        message: "Product deleted successfully",
+        code: 200,
+        result: [
+            ]
+        );
     }
 
     //Funcion para buscar un producto
@@ -152,6 +142,7 @@ class ProductController extends Controller
         //Se invoca a la funcion padre
         return $this->sendResponse(
         message: "Product returned successfully",
+        code: 200,
         result: [
                 'product' => new ProductCollection($product),
             ]
@@ -191,6 +182,7 @@ class ProductController extends Controller
         //Se invoca a la funcion padre
         return $this->sendResponse(
             message: "Product filtered successfully",
+            code: 200,
             result: [
                     'product' => $product->get(),
                 ]

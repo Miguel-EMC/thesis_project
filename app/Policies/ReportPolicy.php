@@ -13,11 +13,11 @@ class ReportPolicy
 
     //Funcion para ver el reporte de un producto de un usuario en especifico
 
-    public function viewAny(User $user,Report $report)
+    public function viewAny(User $user)
     {
-        return $user->id === $report->user_id
+        return $user->role->slug === "admin"
             ? Response::allow()
-            : Response::deny('You do not own this report.');
+            : Response::deny('You are not allowed to view reports.');
     }
 
     public function view(User $user)

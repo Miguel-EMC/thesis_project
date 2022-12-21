@@ -17,6 +17,6 @@ class CommentSeeder extends Seeder
     public function run()
     {
         // 5 comentarios que le pertenecen a un usuario
-        Comment::factory()->count(50)->create();
+        Comment::factory()->count(100)->create();
     }
 }

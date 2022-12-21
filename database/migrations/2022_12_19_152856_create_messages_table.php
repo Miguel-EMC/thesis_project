@@ -19,22 +19,27 @@ return new class extends Migration
             //Columna para el mensaje
             $table->text('message');
 
-            //Relación 
-            //un mensaje pertenece a un user y un user puede tener muchos mensajes
-            $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')
-                ->references('id')
-                ->on('users')
-                ->onDelete('cascade');
-            
-            //Relación
             //un mensaje pertenece a un producto y un producto puede tener muchos mensajes
             $table->unsignedBigInteger('product_id');
             $table->foreign('product_id')
                 ->references('id')
                 ->on('products')
                 ->onDelete('cascade');
+
+            // Un usuario puede recibir muchos mensajes y un mensaje puede ser enviado a muchos usuarios
+            $table->unsignedBigInteger('recipient_id');
+            $table->foreign('recipient_id')
+                ->references('id')
+                ->on('users')
+                ->onDelete('cascade');
             
+            // Un usuario puede enviar muchos mensajes y un mensaje puede ser enviado por muchos usuarios
+            $table->unsignedBigInteger('sender_id');
+            $table->foreign('sender_id')
+                ->references('id')
+                ->on('users')
+                ->onDelete('cascade');
+                
             //columna para conocer la fecha de creacion y actualizacion
             $table->timestamps();
         });

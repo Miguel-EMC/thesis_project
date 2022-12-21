@@ -17,10 +17,4 @@ class Categorie extends Model
     public function products(){
         return $this->hasMany(Product::class);
     }
-    // Relación polimórfica uno a uno
-    // Una categoria puede tener una imagen
-    public function image()
-    {
-        return $this->morphOne(Image::class,'imageable');
-    }
 }
