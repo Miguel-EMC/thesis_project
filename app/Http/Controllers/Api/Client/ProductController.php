@@ -9,6 +9,7 @@ use App\Models\Product;
 use App\Models\User;
 use App\Notifications\ProductCreatedNotification;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class ProductController extends Controller
 {
@@ -79,7 +80,9 @@ class ProductController extends Controller
     //Funcion para actualizar un producto
     public function update(Request $request, Product $product)
     {
+        //Se valida la informacion del producto
         $this->authorize('update', $product);
+
         $request->validate([
             'title' => 'required|max:255',
             'price' => 'required|numeric',
@@ -89,13 +92,15 @@ class ProductController extends Controller
             'delivery_method' => 'required|max:255',
             'brand' => 'required',
             'categorie_id' => 'required|exists:categories,id',
+            'image' => 'image| mimes:jpg,png,jpeg|max:512'
         ]);
-        //Se actualiza el producto
+        $product->update($request->all());
+        
         return $this->sendResponse(
-        message: 'Product updated successfully',
-        code: 200,
-        result: [
-                'product' => new ProductResource($product->update($request->all())),
+               message: 'Product updated successfully',
+               code: 200,
+               result: [
+                'product' => new ProductResource($product),
             ]
         );
     }
@@ -191,8 +196,10 @@ class ProductController extends Controller
     public function sendNotification(Product $product)
     {
         $user = User::find($product->user_id);
-        $user->notify(new ProductCreatedNotification(
-            product_name: $product->title,
-        ));
+        $user->notify(
+            new ProductCreatedNotification(
+                product_name: $product->title,
+            )
+        );
     }
 }

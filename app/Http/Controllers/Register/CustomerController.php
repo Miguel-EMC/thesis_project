@@ -54,12 +54,12 @@ class CustomerController extends Controller
 
         // Se procede a invocar la función para en envío de una notificación de registro
         $this->sendNotifications($user);
-        
+
         // Invoca el controlador padre para la respuesta json
-        return response()->json([
-            'message' => 'User successfully registered',
-            'user' => $user,
-        ], 201);
+        return $this->responseJson(
+            message: 'User created successfully',
+            data: $user
+        );
     }
 
     // Función para enviar notificaciones para el usuario registrado
