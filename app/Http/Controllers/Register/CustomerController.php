@@ -52,9 +52,10 @@ class CustomerController extends Controller
         $this->sendNotifications($user);
 
         // Invoca el controlador padre para la respuesta json
-        return $this->responseJson(
-            message: 'User created successfully',
-            data: $user
+        return $this->sendResponse(
+        message: 'User created successfully',
+        result: $user,
+        code: 201
         );
     }
 
