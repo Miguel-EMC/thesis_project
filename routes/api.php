@@ -34,9 +34,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
                         Route::get('/', 'index')->name('products.index');
                         Route::post('/', 'store')->name('products.store');
                         Route::get('/{product}', 'show')->name('products.show');
-                        Route::get('/{product}/image', 'image')->name('products.image');
                         Route::put('/{product}', 'update')->name('products.update');
                         Route::delete('/{product}', 'destroy')->name('products.destroy');
+                        Route::post('/myProducts', 'indexProducts')->name('products.indexProducts');
                     }
             );
             Route::controller(CommentController::class)->group(

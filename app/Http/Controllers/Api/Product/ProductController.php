@@ -7,8 +7,8 @@ use App\Http\Resources\ProductResource;
 use Illuminate\Http\Request;
 use App\Http\Resources\ProductCollection;
 use App\Models\Product;
-use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
+
 
 class ProductController extends Controller
 {
@@ -34,6 +34,7 @@ class ProductController extends Controller
             ]
         );
     }
+
 
     //Funcion para mostrar un producto en especifico
     //Se recibe el id del producto
@@ -74,20 +75,11 @@ class ProductController extends Controller
                 ]
             );
     }
-    //Funcion para obligar a descargar una imagen de un producto
-    public function image(Product $product)
-    {
-        //retorna la imagen del producto de la base de datos en formato de descarga
-        return Storage::disk('dropbox')->download($product->image);
-    }
 
     //Funcion para actualizar un producto
     public function update(Request $request, Product $product)
     {
-        $response = Gate::inspect('update', $product);
-
-        if ($response->allowed()) {
-
+        $this->authorize('update', $product);
             $request->validate([
                 'title' => 'required|max:255',
                 'price' => 'required|numeric',
@@ -106,11 +98,6 @@ class ProductController extends Controller
                     'product' => new ProductResource($product->update($request->all())),
                 ]
             );
-        } else {
-            return response()->json([
-                'message' => $response->message(),
-            ], 403);
-        }
     }
 
     //Funcion para eliminar un producto
@@ -186,4 +173,16 @@ class ProductController extends Controller
                 ]
             );
     }
+        //Funcion que permite observar los productos creados por un usuario en especifico 
+        public function indexProducts(Request $request){
+            $user = $request->user();
+            $products = Product::where('user_id', $user->id)->get();
+              return $this->sendResponse(
+                  message: "Products returned successfully",
+                  code: 200,
+                  result: [
+                          'products' => new ProductCollection($products),
+                      ]
+                  );
+          }
 }
