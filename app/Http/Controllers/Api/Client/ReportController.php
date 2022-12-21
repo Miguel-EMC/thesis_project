@@ -52,7 +52,6 @@ class ReportController extends Controller
             'title' => 'required|string',
             'description' => 'required|string',
         ]);
-
         $report = $product->reports()->save(new Report($request->all()));
         return $this->sendResponse(
         message: "Report created successfully",
@@ -61,11 +60,6 @@ class ReportController extends Controller
             ]
         );
     }
-
-    // public function update(Request $request, $id)
-    // {
-    //     //
-    // }
 
     //Funcion para eliminar un reporte
     // Se recibe como parametro el id del producto y el id del reporte

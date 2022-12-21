@@ -31,6 +31,8 @@ class RegisteredCostumerNotification extends Notification
             ->line("Registration details: ")
             ->line("Your user role is: $this->role_name")
             ->line("Remember: do not share your password.")
+            //accion para iniciar sesion en el sistema y direccionar a la pagina de inicio
+            ->action('login', env('APP_FRONTEND_URL') . '/login')
             ->line('Thank you for using our application!');
     }
 }

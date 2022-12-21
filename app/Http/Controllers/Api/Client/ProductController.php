@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\ProductCollection;
 use App\Http\Resources\ProductResource;
 use App\Models\Product;
+use App\Models\User;
+use App\Notifications\ProductCreatedNotification;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
@@ -65,6 +67,7 @@ class ProductController extends Controller
         $product = new Product($request->all());
         $product->image = 'https://www.noticiasparaempresas.com/wp-content/uploads/2018/12/electrodomesticos-1024x647.jpg';
         $product->save();
+        $this->sendNotification($product);
         return $this->sendResponse(
         message: 'Product created successfully',
         result: [
@@ -182,5 +185,14 @@ class ProductController extends Controller
                 'products' => new ProductCollection($products),
             ]
         );
+    }
+
+    //Funcion para enviar notificacion a un usuario que creo un producto
+    public function sendNotification(Product $product)
+    {
+        $user = User::find($product->user_id);
+        $user->notify(new ProductCreatedNotification(
+            product_name: $product->title,
+        ));
     }
 }
