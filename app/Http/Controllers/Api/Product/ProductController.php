@@ -66,7 +66,7 @@ class ProductController extends Controller
 
             //Se crea el producto
             $product = new Product($request->all());
-            $path = $request->file('image')->store('products', 'dropbox');
+            $path = $request->image->store('public/articles');
             $product->image = $path;
             $product->save();
             return $this->sendResponse(
