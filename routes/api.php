@@ -2,10 +2,10 @@
 
 use App\Http\Controllers\Account\AvatarController;
 use App\Http\Controllers\Account\ProfileController;
-use App\Http\Controllers\Api\Chat\ChatController;
-use App\Http\Controllers\Api\Comment\CommentController;
-use App\Http\Controllers\Api\Product\ProductController;
-use App\Http\Controllers\Api\Report\ReportController;
+use App\Http\Controllers\Api\Client\ChatController;
+use App\Http\Controllers\Api\Client\CommentController;
+use App\Http\Controllers\Api\Client\ProductController;
+use App\Http\Controllers\Api\Client\ReportController;
 use Illuminate\Support\Facades\Route;
 
 // Hacer uso del archivo auth.php

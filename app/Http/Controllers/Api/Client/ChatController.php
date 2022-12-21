@@ -1,17 +1,15 @@
 <?php
 
-namespace App\Http\Controllers\Api\Chat;
+namespace App\Http\Controllers\Api\Client;
 
 use App\Events\MessageSent;
 use App\Http\Controllers\Controller;
 use App\Models\Product;
-use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class ChatController extends Controller
 {
-    //Función para obtener los mensajes de un producto en específico
+ //Función para obtener los mensajes de un producto en específico
     //Recibe el id del producto
     // public function getMessages($id)
     // {

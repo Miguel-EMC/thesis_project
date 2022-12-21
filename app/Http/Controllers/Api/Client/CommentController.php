@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api\Comment;
+namespace App\Http\Controllers\Api\Client;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\CommentResource;
@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 
 class CommentController extends Controller
 {
-    //Funcion para verificar si el usuario tiene permiso para acceder a los comentarios
+ //Funcion para verificar si el usuario tiene permiso para acceder a los comentarios
     //Se verifica si el usuario tiene el rol de customer
     //Si el usuario no tiene el rol de customer se le deniega el acceso
     //Si el usuario tiene el rol de customer se le permite el acceso

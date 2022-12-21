@@ -1,23 +1,23 @@
 <?php
 
-namespace App\Http\Controllers\Api\Report;
+namespace App\Http\Controllers\Api\Client;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ReportResource;
 use App\Models\Product;
 use App\Models\Report;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Gate;
 
 class ReportController extends Controller
 {
+
     //Function to get all reports 
     //Se recibe como parametro el id del producto
     //Se verifica si el usuario tiene permiso para ver los reportes 
     public function index(Product $product)
     {
         $this->authorize('view', Report::class);
-        
+
         return $this->sendResponse(
         message: "Reports returned successfully",
         result: [
@@ -31,15 +31,15 @@ class ReportController extends Controller
     // Se recibe como parametro el id del producto y el id del reporte 
     public function show(Product $product, Report $report)
     {
-            $this->authorize('viewAny', Report::class);
+        $this->authorize('viewAny', Report::class);
 
-            $report = $product->reports()->where('id', $report->id)->firstOrFail();
-            return $this->sendResponse(
-            message: "Report returned successfully",
-            result: [
-                    'report' => new ReportResource($report)
-                ]
-            );
+        $report = $product->reports()->where('id', $report->id)->firstOrFail();
+        return $this->sendResponse(
+        message: "Report returned successfully",
+        result: [
+                'report' => new ReportResource($report)
+            ]
+        );
     }
 
     //Funcion para crear un reporte
