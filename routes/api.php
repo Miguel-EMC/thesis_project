@@ -64,7 +64,10 @@ Route::middleware(['auth:sanctum'])->group(function () {
             // Se hace uso de grupo de rutas para el chat
             Route::controller(ChatController::class)->group(
                 function () {
-                    Route::get('/{product}/chat', 'chat')->name('products.chat');
+                    Route::get('/chat/sent', 'getMessagesSent')->name('products.chat');
+                    Route::get('/chat/received', 'getMessagesReceived')->name('products.chat');
+                    Route::get('/{product}/chat', 'getMessages')->name('products.chat');
+                    Route::get('/{product}/chat/{message}', 'getMessage')->name('products.chat.message');
                     Route::post('/{product}/chat', 'store')->name('products.chat.store');
                 }
             );

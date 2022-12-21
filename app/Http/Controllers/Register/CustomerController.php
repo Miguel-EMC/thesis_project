@@ -40,10 +40,10 @@ class CustomerController extends Controller
             ]
         ]);
 
-        // Obtiene el rol del usuario Tecncio
+        // Obtiene el rol del usuario cliente
         $role = Role::where('slug', 'customer')->first();
 
-        // Crear una instancia del usuario
+        // Crear una instancia del usuario cliente
         $user = new User($request->all());
 
         // Se setea el paasword al usuario
@@ -54,14 +54,11 @@ class CustomerController extends Controller
 
         // Se procede a invocar la función para en envío de una notificación de registro
         $this->sendNotifications($user);
-
-        $token = $user->createToken('auth_token')->plainTextToken;
-
+        
         // Invoca el controlador padre para la respuesta json
         return response()->json([
             'message' => 'User successfully registered',
             'user' => $user,
-            'token' => $token
         ], 201);
     }
 

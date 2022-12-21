@@ -58,9 +58,11 @@ class Product extends Model
     {
         return $this->belongsToMany(User::class);
     }
-    //Funcion get para obtener los productos creados por el usuario
-    public function getProductsByUser()
+
+    // Relación uno a muchos
+    // Un electrodomestico puede tener muchos mensajes
+    public function messages()
     {
-        return $this->where('user_id', Auth::id())->get();
+        return $this->hasMany(Message::class);
     }
 }
