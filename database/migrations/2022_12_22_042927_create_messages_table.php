@@ -14,21 +14,17 @@ return new class extends Migration
     public function up()
     {
         Schema::create('messages', function (Blueprint $table) {
-            //Columna ID
             $table->id();
 
-            //columnas de la tabla messages
-            $table->integer('sender_id')->unsigned();
-            $table->integer('receiver_id')->unsigned();
-
-            //un mensaje pertenece a un producto y un producto puede tener muchos mensajes
-            $table->unsignedBigInteger('product_id');
-            $table->foreign('product_id')
+            $table->text('message');
+            $table->unsignedBigInteger('from');
+            $table->foreign('from')
                 ->references('id')
-                ->on('products')
+                ->on('users')
                 ->onDelete('cascade');
 
-            $table->text('message');
+            $table->integer('to')->unsigned();
+            
             $table->timestamps();
         });
     }

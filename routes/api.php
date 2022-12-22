@@ -2,8 +2,8 @@
 
 use App\Http\Controllers\Account\AvatarController;
 use App\Http\Controllers\Account\ProfileController;
-use App\Http\Controllers\Api\Client\ChatController;
 use App\Http\Controllers\Api\Client\CommentController;
+use App\Http\Controllers\Api\Client\MessageController;
 use App\Http\Controllers\Api\Client\ProductController;
 use App\Http\Controllers\Api\Client\ReportController;
 use Illuminate\Support\Facades\Route;
@@ -54,23 +54,22 @@ Route::middleware(['auth:sanctum'])->group(function () {
             // Se hace uso de grupo de rutas para reportes
             Route::controller(ReportController::class)->group(
                 function () {
-                        Route::get('/{product}/reports', 'index')->name('products.reports.index');
-                        Route::get('/{product}/reports/{report}', 'show')->name('products.reports.show');
-                        Route::post('/{product}/reports', 'store')->name('products.reports.store');
-                        Route::delete('/{product}/reports/{report}', 'destroy')->name('products.reports.destroy');
+                    Route::get('/{product}/reports', 'index')->name('products.reports.index');
+                    Route::get('/{product}/reports/{report}', 'show')->name('products.reports.show');
+                    Route::post('/{product}/reports', 'store')->name('products.reports.store');
+                    Route::delete('/{product}/reports/{report}', 'destroy')->name('products.reports.destroy');
                 }
             );
+        }
 
-            // Se hace uso de grupo de rutas para el chat
-            Route::controller(ChatController::class)->group(
-                function () {
-                    Route::get('/chat/sent', 'getMessagesSent')->name('products.chat');
-                    Route::get('/chat/received', 'getMessagesReceived')->name('products.chat');
-                    Route::get('/{product}/chat', 'getMessages')->name('products.chat');
-                    Route::get('/{product}/chat/{message}', 'getMessage')->name('products.chat.message');
-                    Route::post('/{product}/chat', 'store')->name('products.chat.store');
-                }
-            );
+    );
+    // Se hace uso de grupo de rutas para el chat
+    Route::controller(MessageController::class)->group(
+        function () {
+            Route::get('user/contacts', 'getContacts')->name('chat.getContacts');
+            Route::get('user/{user}/messages', 'showMessages')->name('chat.showMessages');
+            Route::get('user/{user}/messages/{contact}', 'getMessages')->name('chat.getMessages');
+            Route::post('user/send', 'sendMessage')->name('chat.sendMessage');
         }
     );
 });

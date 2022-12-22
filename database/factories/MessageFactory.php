@@ -17,7 +17,9 @@ class MessageFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'message' => $this->faker->sentence,
+            'to' => random_int(11, 16),
+            'from' => random_int(6, 10),
         ];
     }
 }

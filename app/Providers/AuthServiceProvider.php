@@ -3,10 +3,12 @@
 namespace App\Providers;
 
 use App\Models\Comment;
+use App\Models\Message;
 use App\Models\Product;
 use App\Models\Report;
 use App\Models\User;
 use App\Policies\CommentPolicy;
+use App\Policies\MessagePolicy;
 use App\Policies\ProductPolicy;
 use App\Policies\ReportPolicy;
 use Illuminate\Support\Facades\Gate;
@@ -18,6 +20,7 @@ class AuthServiceProvider extends ServiceProvider
         Product::class => ProductPolicy::class,
         Comment::class => CommentPolicy::class,
         Report::class => ReportPolicy::class,
+        Message::class => MessagePolicy::class,
     ];
 
     
@@ -37,6 +40,11 @@ class AuthServiceProvider extends ServiceProvider
 
         // El perfil de usario customer puede realizar reportes
         Gate::define('create-report',function (User $user){
+            return $user->role->slug === "customer";
+        });
+
+        // El perfil de usuario customer puede enviar mensajes
+        Gate::define('create-message',function (User $user){
             return $user->role->slug === "customer";
         });
     }
