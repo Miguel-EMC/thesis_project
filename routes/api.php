@@ -63,7 +63,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
         }
 
     );
-    // Se hace uso de grupo de rutas para el chat entre usuarios
+    // Se hace uso de grupo de rutas para el chat
     Route::controller(MessageController::class)->group(
         function () {
             Route::get('user/contacts', 'getContacts')->name('chat.getContacts');
