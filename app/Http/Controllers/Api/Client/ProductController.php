@@ -95,7 +95,7 @@ class ProductController extends Controller
             'image' => 'image| mimes:jpg,png,jpeg|max:512'
         ]);
         $product->update($request->all());
-        
+
         return $this->sendResponse(
                message: 'Product updated successfully',
                code: 200,
@@ -178,7 +178,7 @@ class ProductController extends Controller
             ]
         );
     }
-    //Funcion que permite observar los productos creados por un usuario en especifico 
+    //Funcion que permite observar los productos creados por un usuario en especifico
     public function indexProducts(Request $request)
     {
         $user = $request->user();
@@ -201,5 +201,10 @@ class ProductController extends Controller
                 product_name: $product->title,
             )
         );
+    }
+
+    // Funcion para observar todos los productos que han pagado la suscripcion premium
+    public function featuredProducts(){
+        
     }
 }

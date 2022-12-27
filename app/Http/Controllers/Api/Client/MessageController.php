@@ -38,7 +38,7 @@ class MessageController extends Controller
     public function showMessages($user)
     {
         $this->authorize('view', Message::class);
-        // //Comprobamos que el usuario que quiere ver los mensajes es el mismo que esta logueado
+        //Comprobamos que el usuario que quiere ver los mensajes es el mismo que esta logueado
         if (Auth::user()->id != $user) {
             return $this->sendResponse(
             message: 'You are not allowed to see this messages',

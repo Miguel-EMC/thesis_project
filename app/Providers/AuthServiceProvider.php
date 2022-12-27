@@ -6,6 +6,7 @@ use App\Models\Comment;
 use App\Models\Message;
 use App\Models\Product;
 use App\Models\Report;
+use App\Models\Subscription;
 use App\Models\User;
 use App\Policies\CommentPolicy;
 use App\Policies\MessagePolicy;
@@ -21,9 +22,10 @@ class AuthServiceProvider extends ServiceProvider
         Comment::class => CommentPolicy::class,
         Report::class => ReportPolicy::class,
         Message::class => MessagePolicy::class,
+        Subscription::class => SubscriptionPolicy::class,
     ];
 
-    
+
     public function boot()
     {
         $this->registerPolicies();
@@ -45,6 +47,11 @@ class AuthServiceProvider extends ServiceProvider
 
         // El perfil de usuario customer puede enviar mensajes
         Gate::define('create-message',function (User $user){
+            return $user->role->slug === "customer";
+        });
+
+        // El perfil de usuario customer puede realizar suscripciones
+        Gate::define('create-subscription',function (User $user){
             return $user->role->slug === "customer";
         });
     }

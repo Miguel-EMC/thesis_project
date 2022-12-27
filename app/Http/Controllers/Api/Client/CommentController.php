@@ -27,7 +27,7 @@ class CommentController extends Controller
     {
         //Se retorna la coleccion de comentarios del producto
         return $this->sendResponse(
-            message: "Comments returned successfully", 
+            message: "Comments returned successfully",
             code: 200,
             result: [
                 'comments' => CommentResource::collection($product->comments->sortByDesc('created_at'))
@@ -53,11 +53,10 @@ class CommentController extends Controller
     // Se recibe como parametro el id del producto y los datos del comentario
     public function store(Request $request, Product $product)
     {
-
             $request->validate([
                 'comment' => 'required|string'
             ]);
-    
+
             $comment = $product->comments()->save(new Comment($request->all()));
             return $this->sendResponse(
                 message: "Comment created successfully",
@@ -67,7 +66,7 @@ class CommentController extends Controller
                 ]
             );
     }
-    
+
     //Funcion para actualizar un comentario
     // Se recibe como parametro el id del producto y el id del comentario
     public function update(Request $request, Product $product, Comment $comment)

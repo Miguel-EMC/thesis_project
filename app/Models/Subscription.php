@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class Subscription extends Model
 {
@@ -17,6 +18,14 @@ class Subscription extends Model
         'user_id',
         'product_id',
     ];
+
+    public static function boot()
+    {
+        parent::boot();
+        static::creating(function ($subscription) {
+            $subscription->user_id = Auth::id();
+        });
+    }
 
     //Relación uno a muchos inversa
     //un producto puede tener muchas suscripciones

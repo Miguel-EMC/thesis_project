@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\Client\CommentController;
 use App\Http\Controllers\Api\Client\MessageController;
 use App\Http\Controllers\Api\Client\ProductController;
 use App\Http\Controllers\Api\Client\ReportController;
+use App\Http\Controllers\Api\Client\SubscriptionController;
 use Illuminate\Support\Facades\Route;
 
 // Hacer uso del archivo auth.php
@@ -70,6 +71,14 @@ Route::middleware(['auth:sanctum'])->group(function () {
             Route::get('user/{user}/messages', 'showMessages')->name('chat.showMessages');
             Route::get('user/{user}/messages/{contact}', 'getMessages')->name('chat.getMessages');
             Route::post('user/send', 'sendMessage')->name('chat.sendMessage');
+        }
+    );
+
+    // Se hace uso de grupo de rutas para las suscripciones
+    Route::controller(SubscriptionController::class)->group(
+        function () {
+            Route::get('subscriptions', 'index')->name('subscriptions.index');
+            Route::post('subscriptions/', 'store')->name('subscriptions.store');
         }
     );
 });
