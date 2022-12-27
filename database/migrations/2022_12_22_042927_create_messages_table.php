@@ -14,8 +14,9 @@ return new class extends Migration
     public function up()
     {
         Schema::create('messages', function (Blueprint $table) {
+            //ID para la tabla messages de la BDD
             $table->id();
-
+            //columna para la tabla messages de la BDD
             $table->text('message');
             $table->unsignedBigInteger('from');
             $table->foreign('from')

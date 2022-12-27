@@ -77,7 +77,7 @@ class User extends Authenticatable
     {
         return $this->hasMany(Comment::class);
     }
-    
+
     // Relación uno a muchos
     // Un usuario puede tener muchos reportes
     public function reports()
@@ -102,5 +102,12 @@ class User extends Authenticatable
     public function messages()
     {
         return $this->hasMany(Message::class);
+    }
+
+    // Relación uno a muchos
+    // Un usuario puede tener muchas suscripciones
+    public function subscriptions()
+    {
+        return $this->hasMany(Subscription::class);
     }
 }
