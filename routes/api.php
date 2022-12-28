@@ -144,7 +144,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
                     Route::get('subscriptions/', 'index')->name('admin.subscriptions.index');
                     Route::get('subscriptions/{subscription}', 'show')->name('admin.subscriptions.show');
                     Route::post('subscriptions/{subscription}', 'acceptSubscription')->name('admin.subscriptions.acceptSubscription');
-                    Route::post('subscriptions/{subscription}', 'cancelSubscription')->name('admin.subscriptions.cancelSubscription');
+                    Route::post('subscriptions/{subscription}/cancel', 'cancelSubscription')->name('admin.subscriptions.cancelSubscription');
                     Route::delete('subscriptions/{subscription}', 'destroy')->name('admin.subscriptions.destroy');
                 }
             );
