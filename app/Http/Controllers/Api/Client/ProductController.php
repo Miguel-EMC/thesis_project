@@ -202,9 +202,4 @@ class ProductController extends Controller
             )
         );
     }
-
-    // Funcion para observar todos los productos que han pagado la suscripcion premium
-    public function featuredProducts(){
-        
-    }
 }

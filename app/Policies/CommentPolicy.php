@@ -25,33 +25,34 @@ class CommentPolicy
     }
 
     //Funcion para crear un comentario si el usuario tiene el rol de customer
-    public function create(User $user){
-        return $user->role->slug  === 'customer'
-         ? Response::allow()
-         : Response::deny('You are not allowed to create comments.');
+    public function create(User $user)
+    {
+        return $user->role->slug === 'customer'
+            ? Response::allow()
+            : Response::deny('You are not allowed to create comments.');
     }
 
     //Funcion para verificar si el usuario es el dueño del comentario
-    public function update(User $user, Comment $comment){
+    public function update(User $user, Comment $comment)
+    {
         return $user->id === $comment->user_id
-         ? Response::allow()
-         : Response::deny('You do not own this comment.');
+            ? Response::allow()
+            : Response::deny('You do not own this comment.');
     }
 
     //Funcion para eliminar un comentario si el usuario es el dueño del comentario
-    public function delete(User $user, Comment $comment){
+    public function delete(User $user, Comment $comment)
+    {
         return $user->id === $comment->user_id
-         ? Response::allow()
-         : Response::deny('You do not own this comment.');
+            ? Response::allow()
+            : Response::deny('You do not own this comment.');
     }
 
-    public function restore(User $user, Comment $comment)
+    // Funcion para ver todos los mensajes de la base de datos
+    public function viewAll(User $user)
     {
-        //
-    }
-
-    public function forceDelete(User $user, Comment $comment)
-    {
-        //
+        return $user->role->slug === "admin"
+            ? Response::allow()
+            : Response::deny('You are not allowed to see this messages');
     }
 }

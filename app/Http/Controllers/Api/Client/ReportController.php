@@ -11,9 +11,8 @@ use Illuminate\Http\Request;
 class ReportController extends Controller
 {
 
-    //Function to get all reports 
+    //Function to get all reports
     //Se recibe como parametro el id del producto
-    //Se verifica si el usuario tiene permiso para ver los reportes 
     public function index(Product $product)
     {
         $this->authorize('view', Report::class);
@@ -24,11 +23,10 @@ class ReportController extends Controller
                 'reports' => ReportResource::collection($product->reports->sortByDesc('created_at'))
             ]
         );
-
     }
 
     // Funcion para mostrar un reporte de un producto en especifico
-    // Se recibe como parametro el id del producto y el id del reporte 
+    // Se recibe como parametro el id del producto y el id del reporte
     public function show(Product $product, Report $report)
     {
         $this->authorize('viewAny', Report::class);
