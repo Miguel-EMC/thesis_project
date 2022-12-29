@@ -204,7 +204,7 @@ class ProductController extends Controller
         message: "Product returned successfully",
         code: 200,
         result: [
-                'product' => new ProductCollection($product),
+                'product' => $product,
             ]
         );
     }
