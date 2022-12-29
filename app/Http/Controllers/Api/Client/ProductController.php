@@ -192,6 +192,23 @@ class ProductController extends Controller
         );
     }
 
+    //Funcion para ver los productos de un usuario en especifico
+    public function showProducts(Request $request, Product $product)
+    {
+        //verificar si el usuario es el dueño del producto
+        $this->authorize('view', $product);
+        $user = $request->user();
+        $product = Product::where('user_id', $user->id)->where('id', $product->id)->get();
+
+        return $this->sendResponse(
+        message: "Product returned successfully",
+        code: 200,
+        result: [
+                'product' => new ProductCollection($product),
+            ]
+        );
+    }
+
     //Funcion para enviar notificacion a un usuario que creo un producto
     public function sendNotification(Product $product)
     {
@@ -202,4 +219,5 @@ class ProductController extends Controller
             )
         );
     }
+
 }

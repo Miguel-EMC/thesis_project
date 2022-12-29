@@ -15,7 +15,7 @@ class AuthController extends Controller
     private $discarded_role_cust = ['customer'];
     private $discarded_roles = ['admin'];
 
-    // Función para el manejo del inicio de sesión para admin y tecnico
+    // Función para el manejo del inicio de sesión para admin
     public function login(Request $request)
     {
         // Validación de los datos de entrada

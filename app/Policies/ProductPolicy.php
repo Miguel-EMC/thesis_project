@@ -31,4 +31,11 @@ class ProductPolicy
          ? Response::allow()
          : Response::deny('You do not own this product.');
     }
+
+    //Funcion para verificar si el usuario es el dueño del producto
+    public function view(User $user, Product $product){
+        return $user->id === $product->user_id
+         ? Response::allow()
+         : Response::deny('You do not own this product.');
+    }
 }
