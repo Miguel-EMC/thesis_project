@@ -197,16 +197,12 @@ class ProductController extends Controller
     {
         //verificar si el usuario es el dueño del producto
         $this->authorize('view', $product);
-        $user = $request->user();
-        $product = Product::where('user_id', $user->id)->where('id', $product->id)->get();
-
         return $this->sendResponse(
-        message: "Product returned successfully",
-        code: 200,
-        result: [
-                'product' => $product,
-            ]
-        );
+            message: "Product returned successfully",
+            result: [
+                    'product' => new ProductResource($product),
+                ]
+            );
     }
 
     //Funcion para enviar notificacion a un usuario que creo un producto
