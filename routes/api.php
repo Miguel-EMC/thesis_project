@@ -2,12 +2,13 @@
 
 use App\Http\Controllers\Account\AvatarController;
 use App\Http\Controllers\Account\ProfileController;
-use App\Http\Controllers\Api\Admin\CategorieController;
+use App\Http\Controllers\Api\Admin\CategorieController as AdminCategorieController;
 use App\Http\Controllers\Api\Admin\CommentController as AdminCommentController;
 use App\Http\Controllers\Api\Admin\ReportController as AdminReportController;
 use App\Http\Controllers\Api\Admin\CustomerController;
 use App\Http\Controllers\Api\Admin\ProductController as AdminProductController;
 use App\Http\Controllers\Api\Admin\SubscriptionController as AdminSubscriptionController;
+use App\Http\Controllers\Api\Client\CategorieController;
 use App\Http\Controllers\Api\Client\CommentController;
 use App\Http\Controllers\Api\Client\MessageController;
 use App\Http\Controllers\Api\Client\ProductController;
@@ -97,7 +98,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
                 }
             );
             // Se hace uso de grupo de rutas para las categorias
-            Route::controller(CategorieController::class)->group(
+            Route::controller(AdminCategorieController::class)->group(
                 function () {
                     Route::get('categories/', 'index')->name('categories.index');
                     Route::post('categories/', 'store')->name('categories.store');
