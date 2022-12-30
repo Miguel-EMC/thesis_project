@@ -30,7 +30,7 @@ class ProductController extends Controller
         return $this->sendResponse(
         message: "Products returned successfully",
         result: [
-                'products' => new ProductCollection(Product::paginate(20)),
+                'products' => new ProductCollection(Product::all()),
             ]
         );
     }
@@ -97,9 +97,9 @@ class ProductController extends Controller
         $product->update($request->all());
 
         return $this->sendResponse(
-               message: 'Product updated successfully',
-               code: 200,
-               result: [
+        message: 'Product updated successfully',
+        code: 200,
+        result: [
                 'product' => new ProductResource($product),
             ]
         );
@@ -198,11 +198,11 @@ class ProductController extends Controller
         //verificar si el usuario es el dueño del producto
         $this->authorize('view', $product);
         return $this->sendResponse(
-            message: "Product returned successfully",
-            result: [
-                    'product' => new ProductResource($product),
-                ]
-            );
+        message: "Product returned successfully",
+        result: [
+                'product' => new ProductResource($product),
+            ]
+        );
     }
 
     //Funcion para enviar notificacion a un usuario que creo un producto
