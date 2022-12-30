@@ -57,6 +57,11 @@ class AuthServiceProvider extends ServiceProvider
             return $user->role->slug === "customer";
         });
 
+        // El perfil de usuario customer puede visualizar las categorias de productos
+        Gate::define('view-category', function (User $user) {
+            return $user->role->slug === "customer";
+        });
+
         //   :: Creacion de permisos para el rol Admin ::
 
         // El perfil de usuario admin puede gestionar categorias
