@@ -10,6 +10,7 @@ class Categorie extends Model
     use HasFactory;
     protected $fillable = [
         'name',
+        'imagen'
     ];
 
     //Relacion uno a muchos

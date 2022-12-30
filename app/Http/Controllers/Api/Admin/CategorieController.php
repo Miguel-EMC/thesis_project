@@ -42,7 +42,8 @@ class CategorieController extends Controller
     {
         //Se valida la informacion de la categoria
         $request->validate([
-            'name' => 'required|max:255',
+            'name' => 'required|unique:categories|max:255',
+            'imagen' => 'required'
         ]);
 
         //Se crea la categoria
@@ -63,7 +64,8 @@ class CategorieController extends Controller
     {
         //Se valida la informacion de la categoria
         $request->validate([
-            'name' => 'required|max:255',
+            'name' => 'required|unique:categories,name,'.$categorie->id.'|max:255',
+            'imagen' => 'required'
         ]);
 
         //Se actualiza la categoria
