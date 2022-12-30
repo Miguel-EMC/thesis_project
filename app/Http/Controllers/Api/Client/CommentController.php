@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Client;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\CommentCollection;
 use App\Http\Resources\CommentResource;
 use App\Models\Comment;
 use App\Models\Product;
@@ -30,7 +31,7 @@ class CommentController extends Controller
             message: "Comments returned successfully",
             code: 200,
             result: [
-                'comments' => CommentResource::collection($product->comments->sortByDesc('created_at'))
+            'comments' => new CommentCollection($product->comments()->paginate(20)),
             ]
         );
     }
