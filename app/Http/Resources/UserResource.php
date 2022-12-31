@@ -16,6 +16,7 @@ class UserResource extends JsonResource
     {
         // Se procede a definir la estructura de la respuesta de la petición
         return [
+            'id' => $this->id,
             'username' => $this->username,
             'full_name' => $this->getFullName(),
             'email' => $this->email,
