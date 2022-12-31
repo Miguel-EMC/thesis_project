@@ -71,6 +71,7 @@ class ProductController extends Controller
         $this->sendNotification($product);
         return $this->sendResponse(
         message: 'Product created successfully',
+        code: 201,
         result: [
                 'product' => new ProductResource($product),
             ]
