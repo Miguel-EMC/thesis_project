@@ -36,28 +36,29 @@ class MessageController extends Controller
             ]);
     }
 
-    //Funcion para ver solo los mensajes enviados por un usuario
-    public function showMessages($user)
-    {
+    //Funcion para ver solo los mensajes enviados y recibidos por el usuario logueado
+    public function showMessages(){
+
         $this->authorize('view', Message::class);
-        //Comprobamos que el usuario que quiere ver los mensajes es el mismo que esta logueado
-        if (Auth::user()->id != $user) {
+
+        $user = Auth::user()->id;
+
+        //Verificamos que el usuario logeado le pertenezcan los mensajes enviados o recibidos
+        $messages = Message::where('from', $user)->orWhere('to', $user)->get();
+        if ($messages->isEmpty()) {
             return $this->sendResponse(
-            message: 'You are not allowed to see this messages',
-            code: 403,
+            message: 'You have no messages',
+            code: 200,
             result: null
             );
         }
-        $sentMessages = Message::where('from', $user)->get();
-        $receivedMessages = Message::where('to', $user)->get();
-        //Devolvemos los mensajes enviados y recibidos
+        //Retornamos los mensajes enviados y recibidos por el usuario logueado
         return $this->sendResponse(
-            message: 'Messages sent and received',
+            message: 'Messages',
             code: 200,
             result: [
-                'sentMessages' => $sentMessages,
-                'receivedMessages' => $receivedMessages
-        ]);
+                'messages' => $messages
+            ]);
     }
 
     //Funcion para ver los contactos de un usuario

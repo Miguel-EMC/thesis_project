@@ -72,8 +72,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::controller(MessageController::class)->group(
         function () {
             Route::get('user/contacts', 'getContacts')->name('chat.getContacts');
-            Route::get('user/{user}/messages', 'showMessages')->name('chat.showMessages');
-            Route::get('user/{user}/messages/{contact}', 'getMessages')->name('chat.getMessages');
+            Route::get('user/messages', 'showMessages')->name('chat.showMessages');
             Route::post('user/send', 'sendMessage')->name('chat.sendMessage');
         }
     );
