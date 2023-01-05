@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Api\Client;
 
 use App\Events\MessageSent;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\ContactsResource;
+use App\Http\Resources\ProfileResource;
 use App\Models\Message;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -63,6 +65,7 @@ class MessageController extends Controller
 
         $this->authorize('viewContacts', Message::class);
 
+        $user = Auth::user();
         //Verificamos que el usuario tenga mensajes enviados o recibidos con los demas usuarios
         $contacts = Message::where('from', Auth::user()->id)->orWhere('to', Auth::user()->id)->get();
         if ($contacts->isEmpty()) {
@@ -79,7 +82,7 @@ class MessageController extends Controller
             message: 'Contacts',
             code: 200,
             result: [
-                'contacts' => $contacts
+                'user' => new ContactsResource($user),
         ]);
     }
 }
