@@ -12,17 +12,17 @@ class MessagePolicy
 {
     use HandlesAuthorization;
 
-    //Funcion para enviar mensajes a un usuario 
+    //Funcion para enviar mensajes a un usuario
     public function create(User $user)
     {
         return $user->role->slug === "customer"
         ? Response::allow()
         : Response::deny('You are not allowed to send messages');
     }
-    //Funcion para ver los mensajes de un usuario
+    //Funcion para ver los mensajes de un usuario logueado
     public function view(User $user)
     {
-        return $user->role->slug === "customer"
+        return $user->id === Auth::user()->id
         ? Response::allow()
         : Response::deny('You are not allowed to see this messages');
     }
