@@ -64,8 +64,6 @@ class MessageController extends Controller
     public function getContacts(){
 
         $this->authorize('viewContacts', Message::class);
-
-        $user = Auth::user();
         //Verificamos que el usuario tenga mensajes enviados o recibidos con los demas usuarios
         $contacts = Message::where('from', Auth::user()->id)->orWhere('to', Auth::user()->id)->get();
         if ($contacts->isEmpty()) {
@@ -82,7 +80,7 @@ class MessageController extends Controller
             message: 'Contacts',
             code: 200,
             result: [
-                'user' => new ContactsResource($user),
-        ]);
+                'contacts' => ContactsResource::collection($contacts)
+            ]);
     }
 }
