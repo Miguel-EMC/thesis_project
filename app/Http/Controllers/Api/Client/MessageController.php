@@ -49,14 +49,11 @@ class MessageController extends Controller
             result: null
             );
         }
-        $sentMessages = Message::where('from', Auth::user()->id)->where('to', $user)->get();
-        $receivedMessages = Message::where('from', $user)->where('to', Auth::user()->id)->get();
         return $this->sendResponse(
             message: 'Messages',
             code: 200,
             result: [
-                'sentMessages' => $sentMessages,
-                'receivedMessages' => $receivedMessages
+                'messages' => $messages
             ]);
     }
 
