@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\User;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class ProductResource extends JsonResource
@@ -26,6 +27,7 @@ class ProductResource extends JsonResource
         'brand' => $this->brand,
         'categorie_id' => $this->categorie_id,
         'user_id' => $this->user_id,
+        'user' => User::where('id', $this->user_id)->first()->username,
         'image' => $this->image,
         ];
     }
