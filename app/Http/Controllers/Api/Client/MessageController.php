@@ -23,12 +23,18 @@ class MessageController extends Controller
     {
         $this->authorize('create', Message::class);
 
-        event(new MessageSent($request->input('to'), $request->input('message')));
+        //creamos el mensaje
+        $message = Message::create([
+            'to' => $request->to,
+            'message' => $request->message
+        ]);
+        //Retornamos el mensaje enviado
+        broadcast(new MessageSent($request->to, $request->message))->toOthers();
         return $this->sendResponse(
-            message: 'Message sent successfully',
+            message: 'Message sent',
             code: 200,
             result: [
-
+                'message' => $message
             ]);
     }
 
