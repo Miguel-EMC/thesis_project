@@ -33,10 +33,7 @@ class MessageController extends Controller
         //retornamos el mensaje
         return $this->sendResponse(
             message: 'Message sent',
-            code: 200,
-            result: [
-                'message' => $message
-            ]);
+            code: 200);
     }
 
     //Funcion para ver solo los mensajes enviados y recibidos por el usuario logueado
