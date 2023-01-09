@@ -105,7 +105,7 @@ class ProductController extends Controller
             'delivery_method' => 'required|max:255',
             'brand' => 'required',
             'categorie_id' => 'required|exists:categories,id',
-            'image' => 'required|image'
+            'image' => 'image'
         ]);
 
         if ($request->hasFile('image')) {
