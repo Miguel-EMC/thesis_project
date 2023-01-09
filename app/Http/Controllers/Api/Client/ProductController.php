@@ -63,7 +63,7 @@ class ProductController extends Controller
             'delivery_method' => 'required|max:255',
             'brand' => 'required',
             'categorie_id' => 'required|exists:categories,id',
-            'image' => 'required|image| mimes:jpg,png,jpeg|max:512'
+            'image' => 'required|image'
         ]);
         $file = $request->file('image');
         $obj = Cloudinary::upload($file->getRealPath(), ['folder' => 'products']);
@@ -105,7 +105,7 @@ class ProductController extends Controller
             'delivery_method' => 'required|max:255',
             'brand' => 'required',
             'categorie_id' => 'required|exists:categories,id',
-            'image' => 'required|image| mimes:jpg,png,jpeg|max:512'
+            'image' => 'required|image'
         ]);
 
         if ($request->hasFile('image')) {
