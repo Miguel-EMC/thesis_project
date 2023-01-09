@@ -29,7 +29,7 @@ class MessageController extends Controller
             'message' => $request->message
         ]);
         //Retornamos el mensaje enviado
-        broadcast(new MessageSent($message))->toOthers();
+        broadcast(new MessageSent($request->to, $request->message))->toOthers();
         return $this->sendResponse(
             message: 'Message sent',
             code: 200,
