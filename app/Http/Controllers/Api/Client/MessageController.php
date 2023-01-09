@@ -28,8 +28,9 @@ class MessageController extends Controller
             'to' => $request->to,
             'message' => $request->message
         ]);
-        //Retornamos el mensaje enviado
-        broadcast(new MessageSent($request->to, $request->message));
+        //enviamos el mensaje
+        event(new MessageSent($request->to, $request->message));
+        //retornamos el mensaje
         return $this->sendResponse(
             message: 'Message sent',
             code: 200,
