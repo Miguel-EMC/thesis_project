@@ -8,6 +8,7 @@ use App\Http\Resources\ProductResource;
 use App\Models\Product;
 use App\Models\User;
 use App\Notifications\ProductCreatedNotification;
+use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 
@@ -62,13 +63,24 @@ class ProductController extends Controller
             'delivery_method' => 'required|max:255',
             'brand' => 'required',
             'categorie_id' => 'required|exists:categories,id',
-            'image' => 'image| mimes:jpg,png,jpeg|max:512'
+            'image' => 'required|image| mimes:jpg,png,jpeg|max:512'
         ]);
-        //Se crea el producto
-        $product = new Product($request->all());
-        $product->image = 'https://www.noticiasparaempresas.com/wp-content/uploads/2018/12/electrodomesticos-1024x647.jpg';
-        $product->save();
-        $this->sendNotification($product);
+        $file = $request->file('image');
+        $obj = Cloudinary::upload($file->getRealPath(), ['folder' => 'products']);
+        $image_url = $obj->getSecurePath();
+
+        //creamos el producto
+        $product = Product::create([
+            'title' => $request->title,
+            'price' => $request->price,
+            'detail' => $request->detail,
+            'stock' => $request->stock,
+            'state_appliance' => $request->state_appliance,
+            'delivery_method' => $request->delivery_method,
+            'brand' => $request->brand,
+            'categorie_id' => $request->categorie_id,
+            'image' => $image_url,
+        ]);
         return $this->sendResponse(
         message: 'Product created successfully',
         code: 201,
@@ -93,10 +105,27 @@ class ProductController extends Controller
             'delivery_method' => 'required|max:255',
             'brand' => 'required',
             'categorie_id' => 'required|exists:categories,id',
-            'image' => 'image| mimes:jpg,png,jpeg|max:512'
+            'image' => 'required|image| mimes:jpg,png,jpeg|max:512'
         ]);
-        $product->update($request->all());
 
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+            $obj = Cloudinary::upload($file->getRealPath(), ['folder' => 'products']);
+            $image_url = $obj->getSecurePath();
+        }
+
+        //Se actualiza el producto
+        $product->update([
+            'title' => $request->title,
+            'price' => $request->price,
+            'detail' => $request->detail,
+            'stock' => $request->stock,
+            'state_appliance' => $request->state_appliance,
+            'delivery_method' => $request->delivery_method,
+            'brand' => $request->brand,
+            'categorie_id' => $request->categorie_id,
+            'image' => $image_url,
+        ]);
         return $this->sendResponse(
         message: 'Product updated successfully',
         code: 200,
