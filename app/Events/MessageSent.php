@@ -15,20 +15,25 @@ use Illuminate\Queue\SerializesModels;
 
 class MessageSent implements ShouldBroadcast
 {
+
     use Dispatchable, InteractsWithSockets, SerializesModels;
-    public function __construct(
-        public string $to,
-        public string $message)
+
+    public $message;
+
+    public function __construct(    Message $message
+    )
     {
+        $this->message = $message;
 
     }
 
     public function broadcastOn()
     {
-        return new PrivateChannel('chat') ;
+        return new PrivateChannel('messages.' . $this->message->to) ;
     }
-    public function broadcastAs()
+    public function broadcastWith()
     {
-        return 'message';
+        $this->message->load('fromContact');
+        return ["message" => $this->message];
     }
 }
