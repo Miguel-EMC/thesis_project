@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Account;
 
 use App\Helpers\ImageHelper;
 use App\Http\Controllers\Controller;
+use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 use Illuminate\Http\Request;
 
 class AvatarController extends Controller
@@ -12,24 +13,20 @@ class AvatarController extends Controller
     {
         // dd($request);
         // Validación de los datos de entrada
-        $request -> validate([
+        $request->validate([
             'image' => ['required', 'image', 'mimes:jpg,png,jpeg', 'max:512'],
         ]);
 
         // Se obtiene el usario que esta haciendo el Request
         $user = $request->user();
-        // Se invoca la función del helper
-        // Pasando a la función la imagen del request
-        $uploaded_image_path = ImageHelper::getLoadedImagePath(
-            $request['image'],
-            $user->image?->path,
-            'avatars'
-        );
+        $file = $request->file('image');
+        $obj = Cloudinary::upload($file->getRealPath(), ['folder' => 'avatars']);
+        $image_url = $obj->getSecurePath();
 
         // Se hace uso del Trait para asociar esta imagen con el modelo user
-        $user->attachImage($uploaded_image_path);
-        // Uso de la función padre
-        return $this->sendResponse('Avatar updated successfully');
+        $user->attachImage($image_url);
 
+        return $this->sendResponse('Avatar updated successfully');
     }
+
 }
