@@ -36,6 +36,18 @@ class MessageController extends Controller
             code: 200);
     }
 
+    //Funcion para ver todos los mensajes enviados y recividos
+    public function index(){
+        $message = Message::where('from', Auth::user()->id)->orWhere('to', Auth::user()->id)->get();
+        return $this->sendResponse(
+            message: 'Messages',
+            code: 200,
+            result: [
+                'messages' => $message
+            ]);
+
+    }
+
     //Funcion para ver solo los mensajes enviados y recibidos por el usuario logueado
     public function showMessages($user){
 

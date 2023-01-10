@@ -74,6 +74,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
             Route::get('user/contacts', 'getContacts')->name('chat.getContacts');
             Route::get('user/{user}/messages', 'showMessages')->name('chat.showMessages');
             Route::post('user/send', 'sendMessage')->name('chat.sendMessage');
+            Route::get('user/received', 'index')->name('chat.index');
         }
     );
 
