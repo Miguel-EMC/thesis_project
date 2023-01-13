@@ -18,11 +18,9 @@ class MessageController extends Controller
         $this->middleware('can:create-message');
     }
 
-    //Funcion para enviar un mensaje a un usuario especifico
     public function sendMessage(Request $request)
     {
         $this->authorize('create', Message::class);
-
         //creamos el mensaje
         $message = Message::create([
             'to' => $request->to,
@@ -73,7 +71,7 @@ class MessageController extends Controller
     public function getContacts(){
 
         $this->authorize('viewContacts', Message::class);
-        //Verificamos que el usuario tenga mensajes enviados o recibidos con los demas usuarios
+        //Verificamos que el usuario tenga mensajes enviados o recibidos con los demas usuarios menos con el mismo
         $contacts = Message::where('from', Auth::user()->id)->orWhere('to', Auth::user()->id)->get();
         if ($contacts->isEmpty()) {
             return $this->sendResponse(
@@ -82,8 +80,8 @@ class MessageController extends Controller
             result: null
             );
         }
-        //Obtenemos los usuarios con los que ha hablado el usuario logueado
-        $contacts = User::whereIn('id', $contacts->pluck('to'))->orWhereIn('id', $contacts->pluck('from'))->get();
+        //Obtenemos los usuarios con los que ha hablado el usuario logueado menos con el mismo
+        $contacts = User::whereIn('id', $contacts->pluck('from')->merge($contacts->pluck('to')))->where('id', '!=', Auth::user()->id)->get();
         //Retornamos los contactos del usuario logueado
         return $this->sendResponse(
             message: 'Contacts',
