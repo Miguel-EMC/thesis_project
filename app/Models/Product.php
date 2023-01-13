@@ -20,6 +20,9 @@ class Product extends Model
         'brand',
         'categorie_id',
         'image',
+        'featured',
+        'created_at',
+        'updated_at',
     ];
 
     //Funcion para obtener el usuario que creo el producto
@@ -37,7 +40,7 @@ class Product extends Model
     {
         return $this->belongsTo(Categorie::class);
     }
-    
+
     // Relación uno a muchos
     // Un electrodomestico puede tener muchos comentarios
     public function comments()
