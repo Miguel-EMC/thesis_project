@@ -44,7 +44,7 @@ class ProductController extends Controller
         return $this->sendResponse(
         message: "Product returned successfully",
         result: [
-                'product' => new ProductResource($product->user),
+                'product' => new ProductResource($product),
             ]
         );
     }
