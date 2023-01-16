@@ -18,6 +18,8 @@ class Product extends Model
         'state',
         'delivery_method',
         'brand',
+        'address',
+        'phone',
         'categorie_id',
         'image',
         'featured',
@@ -33,6 +35,7 @@ class Product extends Model
             $product->user_id = Auth::id();
         });
     }
+
 
     //Relacion uno a muchos
     // Un electrodomestico le pertenece a una categoria

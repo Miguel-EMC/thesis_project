@@ -2,7 +2,6 @@
 
 namespace App\Http\Resources;
 
-use App\Models\User;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class ProductResource extends JsonResource
@@ -25,6 +24,8 @@ class ProductResource extends JsonResource
         'state_appliance' => $this->state_appliance,
         'delivery_method' => $this->delivery_method,
         'brand' => $this->brand,
+        'address' => $this->address,
+        'phone' => $this->phone,
         'categorie_id' => $this->categorie_id,
         'user_id' => $this->user_id,
         'image' => $this->image,

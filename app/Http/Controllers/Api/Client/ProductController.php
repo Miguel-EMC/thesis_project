@@ -26,8 +26,6 @@ class ProductController extends Controller
     //Funcion para mostrar todos los productos de la base de datos
     public function index()
     {
-        //Se obtiene todos los productos de la base de datos
-        //Se invoca a la funcion padre
         return $this->sendResponse(
         message: "Products returned successfully",
         result: [
@@ -46,7 +44,7 @@ class ProductController extends Controller
         return $this->sendResponse(
         message: "Product returned successfully",
         result: [
-                'product' => new ProductResource($product),
+                'product' => new ProductResource($product->user),
             ]
         );
     }
@@ -62,6 +60,8 @@ class ProductController extends Controller
             'state_appliance' => 'required|max:255',
             'delivery_method' => 'required|max:255',
             'brand' => 'required',
+            'address' => 'required',
+            'phone' => 'required|numeric',
             'categorie_id' => 'required|exists:categories,id',
             'image' => 'required|image'
         ]);
@@ -78,6 +78,8 @@ class ProductController extends Controller
             'state_appliance' => $request->state_appliance,
             'delivery_method' => $request->delivery_method,
             'brand' => $request->brand,
+            'address' => $request->address,
+            'phone' => $request->phone,
             'categorie_id' => $request->categorie_id,
             'image' => $image_url,
         ]);
@@ -104,6 +106,8 @@ class ProductController extends Controller
             'state_appliance' => 'required|max:255',
             'delivery_method' => 'required|max:255',
             'brand' => 'required',
+            'address' => 'required',
+            'phone' => 'required|numeric',
             'categorie_id' => 'required|exists:categories,id',
             'image' => 'image'
         ]);
@@ -123,6 +127,8 @@ class ProductController extends Controller
             'state_appliance' => $request->state_appliance,
             'delivery_method' => $request->delivery_method,
             'brand' => $request->brand,
+            'address' => $request->address,
+            'phone' => $request->phone,
             'categorie_id' => $request->categorie_id,
             'image' => $image_url,
         ]);
@@ -195,6 +201,9 @@ class ProductController extends Controller
         }
         if ($request->brand) {
             $product = $product->where('brand', $request->brand);
+        }
+        if ($request->address) {
+            $product = $product->where('address', $request->address);
         }
         if ($request->categorie_id) {
             $product = $product->where('categorie_id', $request->categorie_id);
