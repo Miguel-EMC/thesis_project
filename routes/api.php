@@ -43,7 +43,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
                         Route::post('/', 'store')->name('products.store');
                         Route::get('/{product}', 'show')->name('products.show');
                         Route::get('/{product}/view', 'showProducts')->name('products.showProducts');
-                        Route::post('/{product}', 'update')->name('products.update');
+                        Route::post('/{product}/update', 'update')->name('products.update');
                         Route::delete('/{product}', 'destroy')->name('products.destroy');
                         Route::get('/myProducts/list', 'indexProducts')->name('products.indexProducts');
                     }
@@ -154,3 +154,4 @@ Route::middleware(['auth:sanctum'])->group(function () {
         }
     );
 });
+
