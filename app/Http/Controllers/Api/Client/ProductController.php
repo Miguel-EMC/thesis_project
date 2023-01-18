@@ -59,14 +59,14 @@ class ProductController extends Controller
         //Se valida la informacion del producto
         $request->validate([
             'title' => 'required|max:50|min:5',
-            'price' => 'required|numeric|max:value:100000',
+            'price' => 'required|numeric|min:1|max:100000',
             'detail' => 'required',
-            'stock' => 'required|numeric|max:value:100000|min:value:1',
+            'stock' => 'required|numeric|min:1|max:100000',
             'state_appliance' => 'required|max:255',
             'delivery_method' => 'required|max:255',
             'brand' => 'required|max:20|min:3',
             'address' => 'required|max:50|min:5',
-            'phone' => 'required|numeric|max value:9999999999|min value:1000000',
+            'phone' => 'required|numeric|max:9999999999|min:1000000',
             'categorie_id' => 'required|exists:categories,id',
             'image' => 'required|image'
         ]);
@@ -105,14 +105,14 @@ class ProductController extends Controller
 
       $request->validate([
         'title' => 'required|max:50|min:5',
-        'price' => 'required|numeric|max:value:100000',
+        'price' => 'required|numeric|min:1|max:100000',
         'detail' => 'required',
-        'stock' => 'required|numeric|max:value:100000|min:value:1',
+        'stock' => 'required|numeric|min:1|max:100000',
         'state_appliance' => 'required|max:255',
         'delivery_method' => 'required|max:255',
         'brand' => 'required|max:20|min:3',
         'address' => 'required|max:50|min:5',
-        'phone' => 'required|numeric|max value:9999999999|min value:1000000',
+        'phone' => 'required|numeric|max:9999999999|min:1000000',
         'categorie_id' => 'required|exists:categories,id',
         'image' => 'required|image'
       ]);
