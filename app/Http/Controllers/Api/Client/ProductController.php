@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Notifications\ProductCreatedNotification;
 use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Gate;
 
 class ProductController extends Controller
@@ -26,13 +27,17 @@ class ProductController extends Controller
     //Funcion para mostrar todos los productos de la base de datos
     public function index()
     {
-        return $this->sendResponse(
+        $products = Cache::remember('products_query', 60, function(){
+            return Product::all();
+        });
+                return $this->sendResponse(
         message: "Products returned successfully",
         result: [
-                'products' => new ProductCollection(Product::all()),
+                'products' => new ProductCollection($products),
             ]
         );
     }
+
 
 
     //Funcion para mostrar un producto en especifico
@@ -59,7 +64,7 @@ class ProductController extends Controller
             'stock' => 'required|numeric',
             'state_appliance' => 'required|max:255',
             'delivery_method' => 'required|max:255',
-            'brand' => 'required',
+            'brand' => 'required|max:20',
             'address' => 'required',
             'phone' => 'required|numeric',
             'categorie_id' => 'required|exists:categories,id',
