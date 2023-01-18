@@ -32,7 +32,7 @@ class ProductController extends Controller
                 return $this->sendResponse(
                 message: "Products returned successfully",
                 result: [
-                        'products' => new ProductCollection(Product::all()),
+                        'products' => new ProductCollection(Product::paginate(10)),
                     ]
                 );
             });
