@@ -53,7 +53,7 @@ class ProductController extends Controller
     {
         //Se valida la informacion del producto
         $request->validate([
-            'title' => 'required|max:255',
+            'title' => 'required|max:50',
             'price' => 'required|numeric',
             'detail' => 'required',
             'stock' => 'required|numeric',
