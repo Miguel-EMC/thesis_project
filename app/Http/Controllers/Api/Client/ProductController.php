@@ -58,15 +58,15 @@ class ProductController extends Controller
     {
         //Se valida la informacion del producto
         $request->validate([
-            'title' => 'required|max:50',
-            'price' => 'required|numeric',
+            'title' => 'required|max:50|min:5',
+            'price' => 'required|numeric|max:value:100000',
             'detail' => 'required',
-            'stock' => 'required|numeric',
+            'stock' => 'required|numeric|max:value:100000|min:value:1',
             'state_appliance' => 'required|max:255',
             'delivery_method' => 'required|max:255',
-            'brand' => 'required|max:20',
-            'address' => 'required',
-            'phone' => 'required|numeric',
+            'brand' => 'required|max:20|min:3',
+            'address' => 'required|max:50|min:5',
+            'phone' => 'required|numeric|max value:9999999999|min value:1000000',
             'categorie_id' => 'required|exists:categories,id',
             'image' => 'required|image'
         ]);
@@ -97,6 +97,54 @@ class ProductController extends Controller
         );
     }
 
+      //Funcion para actualizar un producto
+  public function update(Request $request, Product $product)
+  {
+      //Se valida la informacion del producto
+      $this->authorize('update', $product);
+
+      $request->validate([
+        'title' => 'required|max:50|min:5',
+        'price' => 'required|numeric|max:value:100000',
+        'detail' => 'required',
+        'stock' => 'required|numeric|max:value:100000|min:value:1',
+        'state_appliance' => 'required|max:255',
+        'delivery_method' => 'required|max:255',
+        'brand' => 'required|max:20|min:3',
+        'address' => 'required|max:50|min:5',
+        'phone' => 'required|numeric|max value:9999999999|min value:1000000',
+        'categorie_id' => 'required|exists:categories,id',
+        'image' => 'required|image'
+      ]);
+
+      if ($request->hasFile('image')) {
+          $file = $request->file('image');
+          $obj = Cloudinary::upload($file->getRealPath(), ['folder' => 'products']);
+          $image_url = $obj->getSecurePath();
+      }
+
+      //Se actualiza el producto
+      $product->update([
+          'title' => $request->title,
+          'price' => $request->price,
+          'detail' => $request->detail,
+          'stock' => $request->stock,
+          'state_appliance' => $request->state_appliance,
+          'delivery_method' => $request->delivery_method,
+          'brand' => $request->brand,
+          'address' => $request->address,
+          'phone' => $request->phone,
+          'categorie_id' => $request->categorie_id,
+          'image' => $image_url,
+      ]);
+      return $this->sendResponse(
+      message: 'Product updated successfully',
+      code: 200,
+      result: [
+              'product' => new ProductResource($product),
+          ]
+      );
+  }
     //Funcion para eliminar un producto
     public function destroy(Product $product)
     {
@@ -210,52 +258,4 @@ class ProductController extends Controller
             )
         );
     }
-  //Funcion para actualizar un producto
-  public function update(Request $request, Product $product)
-  {
-      //Se valida la informacion del producto
-      $this->authorize('update', $product);
-
-      $request->validate([
-          'title' => 'required|max:255',
-          'price' => 'required|numeric',
-          'detail' => 'required',
-          'stock' => 'required|numeric',
-          'state_appliance' => 'required|max:255',
-          'delivery_method' => 'required|max:255',
-          'brand' => 'required',
-          'address' => 'required',
-          'phone' => 'required|numeric',
-          'categorie_id' => 'required|exists:categories,id',
-          'image' => 'image'
-      ]);
-
-      if ($request->hasFile('image')) {
-          $file = $request->file('image');
-          $obj = Cloudinary::upload($file->getRealPath(), ['folder' => 'products']);
-          $image_url = $obj->getSecurePath();
-      }
-
-      //Se actualiza el producto
-      $product->update([
-          'title' => $request->title,
-          'price' => $request->price,
-          'detail' => $request->detail,
-          'stock' => $request->stock,
-          'state_appliance' => $request->state_appliance,
-          'delivery_method' => $request->delivery_method,
-          'brand' => $request->brand,
-          'address' => $request->address,
-          'phone' => $request->phone,
-          'categorie_id' => $request->categorie_id,
-          'image' => $image_url,
-      ]);
-      return $this->sendResponse(
-      message: 'Product updated successfully',
-      code: 200,
-      result: [
-              'product' => new ProductResource($product),
-          ]
-      );
-  }
 }
