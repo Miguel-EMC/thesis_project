@@ -11,7 +11,6 @@ use App\Notifications\ProductCreatedNotification;
 use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Facades\Cache;
 
 class ProductController extends Controller
 {
@@ -27,25 +26,12 @@ class ProductController extends Controller
     //Funcion para mostrar todos los productos de la base de datos
     public function index()
     {
-        if (request()->page){
-            return Cache::remember('products'.request()->page, 60, function () {
-                return $this->sendResponse(
-                message: "Products returned successfully",
-                result: [
-                        'products' => new ProductCollection(Product::paginate(10)),
-                    ]
-                );
-            });
-        }else{
-            return Cache::remember('products', 60, function () {
-                return $this->sendResponse(
-                message: "Products returned successfully",
-                result: [
-                        'products' => new ProductCollection(Product::all()),
-                    ]
-                );
-            });
-        }
+        return $this->sendResponse(
+        message: "Products returned successfully",
+        result: [
+                'products' => new ProductCollection(Product::all()),
+            ]
+        );
     }
 
 
