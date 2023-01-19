@@ -19,12 +19,12 @@ class PasswordController extends Controller
           $request->validate([
               'email' => ['required', 'email'],
           ]);
-  
+
           // enviar el link de restablecimiento de contraseña al mail
           $status = Password::sendResetLink(
               $request->only('email')
           );
-  
+
           // Se invoca a la función padre
           return $status === Password::RESET_LINK_SENT
               ? $this->sendResponse(__($status))
@@ -34,17 +34,17 @@ class PasswordController extends Controller
                   code: 422
               );
       }
-  
+
       // Función para enviar el redirect del formulario para restablecer la contraseña
       public function redirectReset(Request $request)
       {
-          $frontend_url = env('APP_FRONTEND_URL');
+          $frontend_url = 'http://localhost:3000/login/resetpssw';
           $token = $request->route('token');
           $email = $request->email;
           $url = "$frontend_url/?token=$token&email=$email";
           return $this->sendResponse(message: 'Successful redirection', result: ['url' => $url]);
       }
-  
+
       // Función para la actualización del password
       public function restore(Request $request)
       {
@@ -57,7 +57,7 @@ class PasswordController extends Controller
                   PasswordValidator::defaults()->mixedCase()->numbers()->symbols(),
               ],
           ]);
-  
+
           // Función para cambiar el password
           $status = Password::reset($validated, function ($user , $password)
           {
@@ -67,7 +67,7 @@ class PasswordController extends Controller
               $user->save();
               event(new PasswordReset($user)); // Actualizar la contraseña en tiempo real
           });
-  
+
           // Se invoca a la función padre
           return $status == Password::PASSWORD_RESET
               ? $this->sendResponse(__($status))
@@ -77,7 +77,7 @@ class PasswordController extends Controller
                   code: 422
               );
       }
-   
+
       // Función para actualizar el password del suuario
       public function update(Request $request)
       {
@@ -89,5 +89,5 @@ class PasswordController extends Controller
           $user->password = Hash::make($validated['password']);
           $user->save();
           return $this->sendResponse('Password updated successfully');
-      }  
+      }
 }
