@@ -24,18 +24,18 @@ return new class extends Migration
               $table->string('address', 50);
               $table->string('password');
               $table->boolean('state')->default(true);
-  
+
               // columnas que seran unicas para la tabla de la BDD
-              $table->string('email')->unique();
-              $table->string('username', 50)->unique();
-  
+              $table->string('email');
+              $table->string('username', 50);
+
               // columnas que seran podran aceptar regitros null para la tabla de la BDD
               $table->string('home_phone', 9)->nullable();
               $table->timestamp('email_verified_at')->nullable();
-  
+
               // columnas especiales para la tabla de la BDD
               $table->rememberToken();
-              $table->timestamps();  
+              $table->timestamps();
         });
     }
 
