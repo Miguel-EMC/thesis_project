@@ -18,12 +18,12 @@ class CustomerController extends Controller
         // Validación de los datos de entrada
         $request->validate([
             'username' => ['required', 'string', 'min:5', 'max:20'],
-            'first_name' => ['required', 'string', 'min:3', 'max:35'],
-            'last_name' => ['required', 'string', 'min:3', 'max:35'],
+            // 'first_name' => ['required', 'string', 'min:3', 'max:35'],
+            // 'last_name' => ['required', 'string', 'min:3', 'max:35'],
             'email' => ['required', 'string', 'email', 'max:255'],
-            'home_phone' => ['nullable', 'numeric', 'digits:7'],
-            'personal_phone' => ['required', 'numeric', 'digits:10'],
-            'address' => ['required', 'string', 'min:5', 'max:50'],
+            // 'home_phone' => ['nullable', 'numeric', 'digits:7'],
+            // 'personal_phone' => ['required', 'numeric', 'digits:10'],
+            // 'address' => ['required', 'string', 'min:5', 'max:50'],
         ]);
 
         // Validación de los datos de entrada

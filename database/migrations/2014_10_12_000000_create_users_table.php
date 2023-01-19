@@ -17,11 +17,11 @@ return new class extends Migration
               // ID para la tabla de la BDD
               $table->id();
 
-              // columnas para la tabla BDD
-              $table->string('first_name', 50);
-              $table->string('last_name', 50);
-              $table->string('personal_phone', 10);
-              $table->string('address', 50);
+            //   // columnas para la tabla BDD
+            //   $table->string('first_name', 50);
+            //   $table->string('last_name', 50);
+            //   $table->string('personal_phone', 10);
+            //   $table->string('address', 50);
               $table->string('password');
               $table->boolean('state')->default(true);
 
@@ -30,8 +30,8 @@ return new class extends Migration
               $table->string('username', 50);
 
               // columnas que seran podran aceptar regitros null para la tabla de la BDD
-              $table->string('home_phone', 9)->nullable();
-              $table->timestamp('email_verified_at')->nullable();
+            //   $table->string('home_phone', 9)->nullable();
+            //   $table->timestamp('email_verified_at')->nullable();
 
               // columnas especiales para la tabla de la BDD
               $table->rememberToken();
