@@ -38,11 +38,10 @@ class PasswordController extends Controller
       // Función para enviar el redirect del formulario para restablecer la contraseña
       public function redirectReset(Request $request)
       {
-          $frontend_url = 'http://localhost:3000/login/resetpssw';
+          $frontend_url = env('APP_FRONTEND_URL');
           $token = $request->route('token');
           $email = $request->email;
           $url = "$frontend_url/?token=$token&email=$email";
-          
           return $this->sendResponse(message: 'Successful redirection', result: ['url' => $url]);
       }
 
