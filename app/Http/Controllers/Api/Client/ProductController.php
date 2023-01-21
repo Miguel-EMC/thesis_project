@@ -150,7 +150,9 @@ class ProductController extends Controller
     {
         $this->authorize('delete', $product);
         //Se elimina el producto
-        $product->delete();
+        $product->update([
+            'state' => 0,
+        ]);
         //Se invoca a la funcion padre
         return $this->sendResponse(
         message: "Product deleted successfully",
