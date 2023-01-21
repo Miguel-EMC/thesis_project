@@ -24,34 +24,27 @@ class SubscriptionController extends Controller
                 result: null
             );
         }
-        //Comprobamos que el producto no este ya en destacados o en espera de ser aceptado
-        if (Product::find($request->product_id)->featured == true) {
-            return $this->sendResponse(
-                message: 'This product is already featured',
-                code: 403,
-                result: null
-            );
-        }
-
         // Validamos los datos
         $request->validate([
             'product_id' =>  ['required', 'exists:products,id', function ($attribute, $value, $fail) {
-                $subscription = Subscription::where('product_id', $value)->where('status', 'pending')->first();
+                $subscription = Subscription::where('product_id', $value)->where('status', 'active')->first();
                 if ($subscription) {
-                    $fail('This product is already in pending subscription');
+                    $fail('This product is already featured');
                 }
             }]
         ]);
-
         // Creamos la suscripcion
         $subscription = Subscription::create([
             'user_id' => auth()->id(),
             'product_id' => $request->product_id,
-            'status' => 'pending',
+            'status' => 'active',
             'start_date' => now(),
-            'end_date' => now()->addDays(30),
+            'end_date' => now()->addSecond(60),
             'payment_method' => 'paypal',
             'price' => 4.99,
+        ]);
+        $subscription->product->update([
+            'featured' => true,
         ]);
         return $this->sendResponse(
             message: "Subscription created successfully",
