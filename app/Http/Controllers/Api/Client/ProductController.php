@@ -23,14 +23,14 @@ class ProductController extends Controller
     {
         $this->middleware('can:manage-product');
     }
-
     //Funcion para mostrar todos los productos de la base de datos
     public function index()
     {
-        $products = Cache::remember('products_query', 60, function(){
-            return Product::all();
+        $products = Cache::remember('products_query', 60, function () {
+            return Product::active()->get();
         });
-                return $this->sendResponse(
+
+        return $this->sendResponse(
         message: "Products returned successfully",
         result: [
                 'products' => new ProductCollection($products),
@@ -38,14 +38,17 @@ class ProductController extends Controller
         );
     }
 
-
-
     //Funcion para mostrar un producto en especifico
     //Se recibe el id del producto
     public function show(Product $product)
     {
-        //Se obtiene el producto de la base de datos
-        //Se invoca a la funcion padre
+        $product = Product::active()->find($product->id);
+        if (!$product) {
+            return $this->sendResponse(
+            message: "Product not found",
+            code: 404
+            );
+        }
         return $this->sendResponse(
         message: "Product returned successfully",
         result: [
@@ -53,6 +56,8 @@ class ProductController extends Controller
             ]
         );
     }
+
+
     //Funcion para crear un producto
     public function store(Request $request)
     {
@@ -97,54 +102,59 @@ class ProductController extends Controller
         );
     }
 
-      //Funcion para actualizar un producto
-  public function update(Request $request, Product $product)
-  {
-      //Se valida la informacion del producto
-      $this->authorize('update', $product);
+    //Funcion para actualizar un producto
+    public function update(Request $request, Product $product)
+    {
+        //Se valida la informacion del producto
+        $this->authorize('update', $product);
+        $product = Product::active()->find($product->id);
+        if (!$product) {
+            return $this->sendResponse(
+            message: "Product not found",
+            code: 404
+            );
+        }
+        $request->validate([
+            'title' => 'required|max:50|min:5',
+            'price' => 'required|numeric|min:1|max:100000',
+            'detail' => 'required',
+            'stock' => 'required|numeric|min:1|max:100000',
+            'state_appliance' => 'required|max:255',
+            'delivery_method' => 'required|max:255',
+            'brand' => 'required|max:20|min:3',
+            'address' => 'required|max:50|min:5',
+            'phone' => 'required|numeric|max:9999999999|min:1000000',
+            'categorie_id' => 'required|exists:categories,id',
+            'image' => 'required|image'
+        ]);
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+            $obj = Cloudinary::upload($file->getRealPath(), ['folder' => 'products']);
+            $image_url = $obj->getSecurePath();
+        }
 
-      $request->validate([
-        'title' => 'required|max:50|min:5',
-        'price' => 'required|numeric|min:1|max:100000',
-        'detail' => 'required',
-        'stock' => 'required|numeric|min:1|max:100000',
-        'state_appliance' => 'required|max:255',
-        'delivery_method' => 'required|max:255',
-        'brand' => 'required|max:20|min:3',
-        'address' => 'required|max:50|min:5',
-        'phone' => 'required|numeric|max:9999999999|min:1000000',
-        'categorie_id' => 'required|exists:categories,id',
-        'image' => 'required|image'
-      ]);
-
-      if ($request->hasFile('image')) {
-          $file = $request->file('image');
-          $obj = Cloudinary::upload($file->getRealPath(), ['folder' => 'products']);
-          $image_url = $obj->getSecurePath();
-      }
-
-      //Se actualiza el producto
-      $product->update([
-          'title' => $request->title,
-          'price' => $request->price,
-          'detail' => $request->detail,
-          'stock' => $request->stock,
-          'state_appliance' => $request->state_appliance,
-          'delivery_method' => $request->delivery_method,
-          'brand' => $request->brand,
-          'address' => $request->address,
-          'phone' => $request->phone,
-          'categorie_id' => $request->categorie_id,
-          'image' => $image_url,
-      ]);
-      return $this->sendResponse(
-      message: 'Product updated successfully',
-      code: 200,
-      result: [
-              'product' => new ProductResource($product),
-          ]
-      );
-  }
+        //Se actualiza el producto
+        $product->update([
+            'title' => $request->title,
+            'price' => $request->price,
+            'detail' => $request->detail,
+            'stock' => $request->stock,
+            'state_appliance' => $request->state_appliance,
+            'delivery_method' => $request->delivery_method,
+            'brand' => $request->brand,
+            'address' => $request->address,
+            'phone' => $request->phone,
+            'categorie_id' => $request->categorie_id,
+            'image' => $image_url,
+        ]);
+        return $this->sendResponse(
+        message: 'Product updated successfully',
+        code: 200,
+        result: [
+                'product' => new ProductResource($product),
+            ]
+        );
+    }
     //Funcion para eliminar un producto
     public function destroy(Product $product)
     {
@@ -227,7 +237,7 @@ class ProductController extends Controller
     public function indexProducts(Request $request)
     {
         $user = $request->user();
-        $products = Product::where('user_id', $user->id)->get();
+        $products = Product::where('user_id', $user->id)->active()->get();
         return $this->sendResponse(
         message: "Products returned successfully",
         code: 200,
@@ -242,6 +252,13 @@ class ProductController extends Controller
     {
         //verificar si el usuario es el dueño del producto
         $this->authorize('view', $product);
+        $product = Product::active()->find($product->id);
+        if (!$product) {
+            return $this->sendResponse(
+            message: "Product not found",
+            code: 404
+            );
+        }
         return $this->sendResponse(
         message: "Product returned successfully",
         result: [
