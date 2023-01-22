@@ -95,8 +95,8 @@ class AuthServiceProvider extends ServiceProvider
             return $user->role->slug === "admin";
         });
 
-        ResetPassword::createUrlUsing(function ($user, string $token) {
-            return  'http://localhost:3000/login/resetpssw/?='.$token;
-        });
+        // ResetPassword::createUrlUsing(function ($user, string $token) {
+        //     return  'http://localhost:3000/login/resetpssw/?='.$token;
+        // });
     }
 }
