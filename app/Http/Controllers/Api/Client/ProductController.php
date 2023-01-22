@@ -229,7 +229,7 @@ class ProductController extends Controller
         message: "Product filtered successfully",
         code: 200,
         result: [
-                'product' => $product->get(),
+                'product' => new ProductCollection($product->get()),
             ]
         );
     }

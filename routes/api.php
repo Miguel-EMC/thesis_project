@@ -63,11 +63,11 @@ Route::middleware(['auth:sanctum'])->group(function () {
                     Route::post('/{product}/reports', 'store')->name('products.reports.store');
                 }
             );
-            Route::post('search', [ProductController::class, 'search'])->name('products.search');
-            Route::post('filter', [ProductController::class, 'filter'])->name('products.filter');
         }
-
     );
+    Route::get('search', [ProductController::class, 'search'])->name('products.search');
+    Route::get('filter/products', [ProductController::class, 'filter'])->name('products.filter');
+
     // Se hace uso de grupo de rutas para el chat
     Route::controller(MessageController::class)->group(
         function () {
