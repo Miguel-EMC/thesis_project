@@ -22,8 +22,8 @@ class Kernel extends HttpKernel
             \App\Http\Middleware\TrimStrings::class,
             \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
             //\App\Http\Middleware\Cors::class,
-            \Barryvdh\Cors\HandleCors::class,
-    ];
+            \Fruitcake\Cors\HandleCors::class,
+        ];
 
     /**
      * The application's route middleware groups.
