@@ -175,12 +175,6 @@ class ProductController extends Controller
     //Funcion para buscar un producto
     public function search(Request $request)
     {
-        if ($request->isMethod('options')) {
-            return response('', 200)
-                ->header('Access-Control-Allow-Origin', 'http://localhost:3000')
-                ->header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
-                ->header('Access-Control-Allow-Headers', 'Content-Type');
-        }
         //Se valida la informacion del producto
         $request->validate([
             'title' => 'required|max:255',
