@@ -39,7 +39,7 @@ class SubscriptionController extends Controller
             'product_id' => $request->product_id,
             'status' => 'active',
             'start_date' => now(),
-            'end_date' => now()->addHours(1),
+            'end_date' => now()->addDays(2),
             'payment_method' => 'paypal',
             'price' => 4.99,
         ]);
