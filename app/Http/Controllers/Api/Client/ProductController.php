@@ -10,8 +10,7 @@ use App\Models\User;
 use App\Notifications\ProductCreatedNotification;
 use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Gate;
+
 
 class ProductController extends Controller
 {

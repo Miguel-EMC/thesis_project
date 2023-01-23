@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Client;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\SubscriptionCollection;
 use App\Models\Product;
 use App\Models\Subscription;
 use Illuminate\Http\Request;
@@ -57,12 +58,15 @@ class SubscriptionController extends Controller
 
     // Funcion para obtener las suscripciones del usuario autenticado
     public function index(){
-        $subscriptions = Subscription::where('user_id', auth()->id())->get();
+        $subscriptions = Subscription::where('user_id', auth()->id())->paginate(3);
         return $this->sendResponse(
             message: "Subscriptions retrieved successfully",
             code: 200,
             result: [
-                'subscriptions' => $subscriptions,
+                'subscriptions' => new SubscriptionCollection($subscriptions),
+                'pagination' => [
+                    'last_page' => $subscriptions->lastPage(),
+                ],
             ]
         );
     }
