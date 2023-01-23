@@ -235,12 +235,7 @@ class ProductController extends Controller
         result: [
                 'product' => new ProductCollection($product->paginate(12)),
                 'pagination' => [
-                    'total' => Product::count(),
-                    'per_page' => 12,
-                    'current_page' => 1,
-                    'last_page' => ceil(Product::count() / 12),
-                    'from' => 1,
-                    'to' => 12,
+                    'last_page' => $product->paginate(12)->lastPage(),
                 ],
             ]
         );
