@@ -26,7 +26,20 @@ class ProductController extends Controller
     //Funcion para mostrar todos los productos de la base de datos
     public function index()
     {
-        return  new ProductCollection(Product::paginate(12));
+        return $this->sendResponse(
+        message: "Products returned successfully",
+        result: [
+                'products' => new ProductCollection(Product::paginate(12)),
+                'pagination' => [
+                    'total' => Product::count(),
+                    'per_page' => 12,
+                    'current_page' => 1,
+                    'last_page' => ceil(Product::count() / 12),
+                    'from' => 1,
+                    'to' => 12,
+                ],
+            ]
+        );
     }
 
     //Funcion para mostrar un producto en especifico
