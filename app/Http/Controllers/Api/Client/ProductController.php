@@ -36,6 +36,17 @@ class ProductController extends Controller
         );
     }
 
+    //Funcion para todos los productos registrados por el usuario sin paginacion
+    public function featured()
+    {
+        return $this->sendResponse(
+            message: "Products returned successfully",
+            result: [
+                    'products' => new ProductCollection(Product::all()),
+                ]
+        );
+    }
+
     //Funcion para mostrar un producto en especifico
     //Se recibe el id del producto
     public function show(Product $product)
