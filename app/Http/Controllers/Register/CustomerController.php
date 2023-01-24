@@ -23,7 +23,7 @@ class CustomerController extends Controller
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'home_phone' => ['nullable', 'numeric', 'digits:7'],
             'personal_phone' => ['required', 'numeric', 'digits:10'],
-            'address' => ['required', 'string', 'min:5', 'max:50'],
+            'address' => ['required', 'string', 'min:3', 'max:50'],
         ]);
 
         // Validación de los datos de entrada
