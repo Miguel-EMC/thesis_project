@@ -65,14 +65,14 @@ class SubscriptionController extends Controller
     // Funcion para obtener las suscripciones del usuario autenticado
     public function index()
     {
-        $subscriptions = Subscription::where('user_id', auth()->id())->get();
-
+        $products = Product::where('user_id', auth()->id())->where('state', 1)->get();
+        $subscriptions = Subscription::whereIn('product_id', $products->pluck('id'))->get();
         return $this->sendResponse(
-        message: "Subscriptions retrieved successfully",
-        code: 200,
+        message: "Subscriptions returned successfully",
         result: [
-                'susbcriptions' => SubscriptionResource::collection($subscriptions)
+                'subscriptions' => SubscriptionResource::collection($subscriptions),
             ]
         );
     }
+
 }
