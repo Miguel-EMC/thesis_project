@@ -28,10 +28,7 @@ class ProductController extends Controller
         return $this->sendResponse(
         message: "Products returned successfully",
         result: [
-                'products' => new ProductCollection(Product::paginate(12)),
-                'pagination' => [
-                    'last_page' => ceil(Product::count() / 12),
-                ],
+                'products' => new ProductCollection(Product::all()),
             ]
         );
     }
@@ -238,10 +235,7 @@ class ProductController extends Controller
         message: "Product filtered successfully",
         code: 200,
         result: [
-                'product' => new ProductCollection($product->paginate(12)),
-                'pagination' => [
-                    'last_page' => $product->paginate(12)->lastPage(),
-                ],
+                'product' => new ProductCollection($product)
             ]
         );
     }
@@ -255,26 +249,6 @@ class ProductController extends Controller
         code: 200,
         result: [
                 'products' => new ProductCollection($products),
-            ]
-        );
-    }
-
-    //Funcion para ver los productos de un usuario en especifico
-    public function showProducts(Request $request, Product $product)
-    {
-        //verificar si el usuario es el dueño del producto
-        $this->authorize('view', $product);
-        $product = Product::active()->find($product->id);
-        if (!$product) {
-            return $this->sendResponse(
-            message: "Product not found",
-            code: 404
-            );
-        }
-        return $this->sendResponse(
-        message: "Product returned successfully",
-        result: [
-                'product' => new ProductResource($product),
             ]
         );
     }
