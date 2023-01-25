@@ -25,22 +25,13 @@ class ProductController extends Controller
     //Funcion para mostrar todos los productos de la base de datos
     public function index()
     {
-        return $this->sendResponse(
-        message: "Products returned successfully",
-        result: [
-                'products' => new ProductCollection(Product::all()),
-            ]
-        );
-    }
-
-    //Funcion para todos los productos registrados por el usuario sin paginacion
-    public function featured()
-    {
+        //Retornar todos los productos con el estado active
+        $products = Product::active()->get();
         return $this->sendResponse(
             message: "Products returned successfully",
             result: [
-                    'products' => new ProductCollection(Product::all()),
-                ]
+                'products' => ProductResource::collection($products),
+            ]
         );
     }
 
@@ -178,21 +169,14 @@ class ProductController extends Controller
         );
     }
 
-    //Funcion para buscar un producto
+    //Funcion para buscar un producto menos los que estan con estado 0
     public function search(Request $request)
     {
-        //Se valida la informacion del producto
-        $request->validate([
-            'title' => 'required|max:255',
-        ]);
-        //Se busca el producto
-        $product = Product::where('title', 'like', '%' . $request->title . '%')->get();
-        //Se invoca a la funcion padre
+        $product = Product::active()->where('title', 'like', '%' . $request->title . '%')->get();
         return $this->sendResponse(
         message: "Product returned successfully",
-        code: 200,
         result: [
-                'product' => new ProductCollection($product),
+                'product' => ProductResource::collection($product),
             ]
         );
     }
@@ -236,19 +220,6 @@ class ProductController extends Controller
         code: 200,
         result: [
                 'product' => new ProductCollection($product)
-            ]
-        );
-    }
-    //Funcion que permite observar los productos creados por un usuario en especifico
-    public function indexProducts(Request $request)
-    {
-        $user = $request->user();
-        $products = Product::where('user_id', $user->id)->active()->get();
-        return $this->sendResponse(
-        message: "Products returned successfully",
-        code: 200,
-        result: [
-                'products' => new ProductCollection($products),
             ]
         );
     }
