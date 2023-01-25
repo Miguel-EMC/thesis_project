@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Client;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\SubscriptionCollection;
+use App\Http\Resources\SubscriptionResource;
 use App\Models\Product;
 use App\Models\Subscription;
 use Illuminate\Http\Request;
@@ -16,23 +17,28 @@ class SubscriptionController extends Controller
     }
 
     // Funcion para crear una suscripcion para que un usuario pueda colocar su producto en destacados
-    public function store(Request $request){
+    public function store(Request $request)
+    {
         //Comprobamos que el producto pertenezca al usuario autenticado
         if (auth()->id() != Product::find($request->product_id)->user_id) {
             return $this->sendResponse(
-                message: 'You are not allowed to subscribe this product',
-                code: 403,
-                result: null
+            message: 'You are not allowed to subscribe this product',
+            code: 403,
+            result: null
             );
         }
         // Validamos los datos
         $request->validate([
-            'product_id' =>  ['required', 'exists:products,id', function ($attribute, $value, $fail) {
-                $subscription = Subscription::where('product_id', $value)->where('status', 'active')->first();
-                if ($subscription) {
-                    $fail('This product is already featured');
+            'product_id' => [
+                'required',
+                'exists:products,id',
+                function ($attribute, $value, $fail) {
+                    $subscription = Subscription::where('product_id', $value)->where('status', 'active')->first();
+                    if ($subscription) {
+                        $fail('This product is already featured');
+                    }
                 }
-            }]
+            ]
         ]);
         // Creamos la suscripcion
         $subscription = Subscription::create([
@@ -48,25 +54,24 @@ class SubscriptionController extends Controller
             'featured' => true,
         ]);
         return $this->sendResponse(
-            message: "Subscription created successfully",
-            code: 201,
-            result: [
+        message: "Subscription created successfully",
+        code: 201,
+        result: [
                 'subscription' => $subscription,
             ]
         );
     }
 
     // Funcion para obtener las suscripciones del usuario autenticado
-    public function index(){
-        $subscriptions = Subscription::where('user_id', auth()->id())->paginate(3);
+    public function index()
+    {
+        $subscriptions = Subscription::where('user_id', auth()->id())->get();
+
         return $this->sendResponse(
-            message: "Subscriptions retrieved successfully",
-            code: 200,
-            result: [
-                'subscriptions' => new SubscriptionCollection($subscriptions),
-                'pagination' => [
-                    'last_page' => $subscriptions->lastPage(),
-                ],
+        message: "Subscriptions retrieved successfully",
+        code: 200,
+        result: [
+                'susbcriptions' => SubscriptionResource::collection($subscriptions)
             ]
         );
     }
