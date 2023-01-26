@@ -169,7 +169,7 @@ class ProductController extends Controller
         );
     }
 
-    //Funcion para buscar un producto menos los que estan con estado 0
+    //Funcion para buscar un producto
     public function search(Request $request)
     {
         $product = Product::active()->where('title', 'like', '%' . $request->title . '%')->get();

@@ -36,14 +36,6 @@ class CustomerController extends Controller
             ]
         );
     }
-    public function store(Request $request)
-    {
-
-    }
-    public function update(Request $request, $id)
-    {
-
-    }
 
     //Funcion para eliminar un cliente
     public function destroy(User $customer)
