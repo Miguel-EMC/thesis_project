@@ -184,6 +184,7 @@ class ProductController extends Controller
     //Funcion para filtrar productos
     public function filter(Request $request, Product $product)
     {
+        $product = $product->where('state', '1');
         if ($request->id) {
             $product = $product->where('id', $request->id);
         }
@@ -219,7 +220,7 @@ class ProductController extends Controller
         message: "Product filtered successfully",
         code: 200,
         result: [
-                'product' => new ProductCollection($product)
+               'product' => $product->get(),
             ]
         );
     }
