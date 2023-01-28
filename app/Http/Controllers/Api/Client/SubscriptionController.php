@@ -19,7 +19,6 @@ class SubscriptionController extends Controller
     // Funcion para crear una suscripcion para que un usuario pueda colocar su producto en destacados
     public function store(Request $request)
     {
-        //Comprobamos que el producto pertenezca al usuario autenticado
         if (auth()->id() != Product::find($request->product_id)->user_id) {
             return $this->sendResponse(
             message: 'You are not allowed to subscribe this product',
@@ -27,7 +26,6 @@ class SubscriptionController extends Controller
             result: null
             );
         }
-        // Validamos los datos
         $request->validate([
             'product_id' => [
                 'required',
@@ -40,7 +38,6 @@ class SubscriptionController extends Controller
                 }
             ]
         ]);
-        // Creamos la suscripcion
         $subscription = Subscription::create([
             'user_id' => auth()->id(),
             'product_id' => $request->product_id,
