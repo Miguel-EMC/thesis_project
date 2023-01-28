@@ -12,6 +12,7 @@ use App\Policies\CommentPolicy;
 use App\Policies\MessagePolicy;
 use App\Policies\ProductPolicy;
 use App\Policies\ReportPolicy;
+use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
@@ -93,5 +94,9 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define('manage-subscription', function (User $user) {
             return $user->role->slug === "admin";
         });
+
+        // ResetPassword::createUrlUsing(function ($user, string $token) {
+        //     return  'http://localhost:3000/login/resetpssw/?='.$token;
+        // });
     }
 }

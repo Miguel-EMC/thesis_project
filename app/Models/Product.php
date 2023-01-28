@@ -18,8 +18,13 @@ class Product extends Model
         'state',
         'delivery_method',
         'brand',
+        'address',
+        'phone',
         'categorie_id',
         'image',
+        'featured',
+        'created_at',
+        'updated_at',
     ];
 
     //Funcion para obtener el usuario que creo el producto
@@ -31,13 +36,14 @@ class Product extends Model
         });
     }
 
+
     //Relacion uno a muchos
     // Un electrodomestico le pertenece a una categoria
     public function categorie()
     {
         return $this->belongsTo(Categorie::class);
     }
-    
+
     // Relación uno a muchos
     // Un electrodomestico puede tener muchos comentarios
     public function comments()
@@ -64,5 +70,9 @@ class Product extends Model
     public function messages()
     {
         return $this->hasMany(Message::class);
+    }
+    public function scopeActive($query)
+    {
+        return $query->where('state', 1);
     }
 }

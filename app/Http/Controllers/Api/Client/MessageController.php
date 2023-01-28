@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Api\Client;
 
 use App\Events\MessageSent;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\ContactsResource;
+use App\Http\Resources\ProfileResource;
 use App\Models\Message;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -16,54 +18,60 @@ class MessageController extends Controller
         $this->middleware('can:create-message');
     }
 
-    //Funcion para enviar un mensaje a un usuario especifico
     public function sendMessage(Request $request)
     {
         $this->authorize('create', Message::class);
-
+        //creamos el mensaje
         $message = Message::create([
             'to' => $request->to,
-            'message' => $request->message,
+            'message' => $request->message
         ]);
-        broadcast(new MessageSent($message));
+        //enviamos el mensaje
+        event(new MessageSent($request->to, $request->message));
+        //retornamos el mensaje
         return $this->sendResponse(
-            message: 'Message sent successfully',
-            code: 200,
-            result: [
-                'message' => $message
-            ]);
+            message: 'Message sent',
+            code: 200);
     }
 
-    //Funcion para ver solo los mensajes enviados por un usuario
-    public function showMessages($user)
-    {
+    //Funcion para ver todos los mensajes enviados y recividos
+    public function index(){
+        $message = Message::where('from', Auth::user()->id)->orWhere('to', Auth::user()->id)->get();
+        return $this->sendResponse(
+            message: 'Messages',
+            code: 200,
+            result: [
+                'messages' => $message
+            ]);
+
+    }
+
+    //Funcion para ver solo los mensajes enviados y recibidos por el usuario logueado
+    public function showMessages($user){
+
         $this->authorize('view', Message::class);
-        //Comprobamos que el usuario que quiere ver los mensajes es el mismo que esta logueado
-        if (Auth::user()->id != $user) {
+
+        $messages = Message::where('from', Auth::user()->id)->where('to', $user)->orWhere('from', $user)->where('to', Auth::user()->id)->get();
+        if ($messages->isEmpty()) {
             return $this->sendResponse(
-            message: 'You are not allowed to see this messages',
-            code: 403,
+            message: 'You have no messages',
+            code: 200,
             result: null
             );
         }
-        $sentMessages = Message::where('from', $user)->get();
-        $receivedMessages = Message::where('to', $user)->get();
-        //Devolvemos los mensajes enviados y recibidos
         return $this->sendResponse(
-            message: 'Messages sent and received',
+            message: 'Messages',
             code: 200,
             result: [
-                'sentMessages' => $sentMessages,
-                'receivedMessages' => $receivedMessages
-        ]);
+                'messages' => $messages
+            ]);
     }
 
     //Funcion para ver los contactos de un usuario
     public function getContacts(){
 
         $this->authorize('viewContacts', Message::class);
-
-        //Verificamos que el usuario tenga mensajes enviados o recibidos con los demas usuarios
+        //Verificamos que el usuario tenga mensajes enviados o recibidos con los demas usuarios menos con el mismo
         $contacts = Message::where('from', Auth::user()->id)->orWhere('to', Auth::user()->id)->get();
         if ($contacts->isEmpty()) {
             return $this->sendResponse(
@@ -72,14 +80,14 @@ class MessageController extends Controller
             result: null
             );
         }
-        //Obtenemos los usuarios con los que ha hablado el usuario logueado
-        $contacts = User::whereIn('id', $contacts->pluck('to'))->orWhereIn('id', $contacts->pluck('from'))->get();
+        //Obtenemos los usuarios con los que ha hablado el usuario logueado menos con el mismo
+        $contacts = User::whereIn('id', $contacts->pluck('from')->merge($contacts->pluck('to')))->where('id', '!=', Auth::user()->id)->get();
         //Retornamos los contactos del usuario logueado
         return $this->sendResponse(
             message: 'Contacts',
             code: 200,
             result: [
-                'contacts' => $contacts
-        ]);
+                'contacts' => ContactsResource::collection($contacts)
+            ]);
     }
 }

@@ -31,7 +31,7 @@ class CommentController extends Controller
             message: "Comments returned successfully",
             code: 200,
             result: [
-            'comments' => new CommentCollection($product->comments()->paginate(20)),
+            'comments' => new CommentCollection(Product::find($product->id)->comments),
             ]
         );
     }

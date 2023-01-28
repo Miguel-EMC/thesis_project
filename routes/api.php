@@ -8,7 +8,6 @@ use App\Http\Controllers\Api\Admin\ReportController as AdminReportController;
 use App\Http\Controllers\Api\Admin\CustomerController;
 use App\Http\Controllers\Api\Admin\ProductController as AdminProductController;
 use App\Http\Controllers\Api\Admin\SubscriptionController as AdminSubscriptionController;
-use App\Http\Controllers\Api\Client\CategorieController;
 use App\Http\Controllers\Api\Client\CommentController;
 use App\Http\Controllers\Api\Client\MessageController;
 use App\Http\Controllers\Api\Client\ProductController;
@@ -42,10 +41,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
                         Route::get('/', 'index')->name('products.index');
                         Route::post('/', 'store')->name('products.store');
                         Route::get('/{product}', 'show')->name('products.show');
-                        Route::get('/{product}/view', 'showProducts')->name('products.showProducts');
-                        Route::put('/{product}', 'update')->name('products.update');
+                        Route::post('/{product}/update', 'update')->name('products.update');
                         Route::delete('/{product}', 'destroy')->name('products.destroy');
-                        Route::post('/myProducts', 'indexProducts')->name('products.indexProducts');
                     }
             );
             Route::controller(CommentController::class)->group(
@@ -63,18 +60,18 @@ Route::middleware(['auth:sanctum'])->group(function () {
                     Route::post('/{product}/reports', 'store')->name('products.reports.store');
                 }
             );
-            Route::post('search', [ProductController::class, 'search'])->name('products.search');
-            Route::post('filter', [ProductController::class, 'filter'])->name('products.filter');
         }
-
     );
+    Route::get('search', [ProductController::class, 'search'])->name('products.search');
+    Route::get('filter/products', [ProductController::class, 'filter'])->name('products.filter');
+
     // Se hace uso de grupo de rutas para el chat
     Route::controller(MessageController::class)->group(
         function () {
             Route::get('user/contacts', 'getContacts')->name('chat.getContacts');
             Route::get('user/{user}/messages', 'showMessages')->name('chat.showMessages');
-            Route::get('user/{user}/messages/{contact}', 'getMessages')->name('chat.getMessages');
             Route::post('user/send', 'sendMessage')->name('chat.sendMessage');
+            Route::get('user/received', 'index')->name('chat.index');
         }
     );
 
@@ -154,3 +151,4 @@ Route::middleware(['auth:sanctum'])->group(function () {
         }
     );
 });
+

@@ -22,11 +22,17 @@ class ProductResource extends JsonResource
         'detail' => $this->detail,
         'stock' => $this->stock,
         'state_appliance' => $this->state_appliance,
+        'state' => $this->state,
         'delivery_method' => $this->delivery_method,
         'brand' => $this->brand,
+        'address' => $this->address,
+        'phone' => $this->phone,
         'categorie_id' => $this->categorie_id,
         'user_id' => $this->user_id,
         'image' => $this->image,
+        'featured' => $this->featured,
+        'created_at' => $this->created_at,
+        'updated_at' => $this->updated_at,
         ];
     }
 }

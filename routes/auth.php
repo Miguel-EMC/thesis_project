@@ -12,7 +12,7 @@ Route::post('/register', [CustomerController::class, 'register'])->name('registe
 Route::post('/login', [AuthController::class, 'login'])->name('login');
 
 // Ruta pública para el inicio de sesion del cliente
-Route::post('/loginCust', [AuthController::class, 'loginCust'])->name('loginCust');
+// Route::post('/loginCust', [AuthController::class, 'loginCust'])->name('loginCust');
 
 // Ruta pública para el manejo del olvido de contraseña del usuario
 Route::post('/forgot-password', [PasswordController::class, 'resendLink'])->name('password.resend-link');

@@ -13,7 +13,7 @@ class Message extends Model
         'from',
         'to',
         'message'];
-    
+
         // //Funcion para obtener el usuario que envio el mensaje
     public static function boot()
     {
@@ -27,5 +27,5 @@ class Message extends Model
     {
         return $this->hasOne(User::class, 'id', 'from');
     }
-     
+
 }

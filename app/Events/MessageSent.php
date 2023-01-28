@@ -1,10 +1,6 @@
 <?php
 
 namespace App\Events;
-
-use App\Models\Message;
-use App\Models\Product;
-use App\Models\User;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
@@ -16,19 +12,19 @@ use Illuminate\Queue\SerializesModels;
 class MessageSent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
-    public $message;
-    public function __construct( Message $message)
+    public function __construct(
+        public string $to,
+        public string $message)
     {
-        $this->message = $message;
+
     }
 
     public function broadcastOn()
     {
-        return new PrivateChannel('messages.' . $this->message->to);
+        return ['chat'];
     }
-    public function broadcastWith()
+    public function broadcastAs()
     {
-        $this->message->load('fromContact');
-        return ["message" => $this->message];
+        return 'message';
     }
 }

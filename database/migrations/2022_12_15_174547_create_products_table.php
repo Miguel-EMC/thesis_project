@@ -27,7 +27,10 @@ return new class extends Migration {
             $table->string('state_appliance', 50);
             //columna para conocer el estado del producto
             $table->boolean('state')->default(true);
-
+            // columna  para conocer la direccion del usuario
+            $table->string('address', 150);
+            // columna para conocer el telefono del usuario
+            $table->string('phone', 20);
             // columnas que se podran aceptar como registros null en la tabla Appliances de la BD
             // metodo de envio del electrodomestico
             $table->string('delivery_method', 150)->nullable();
