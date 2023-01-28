@@ -8,7 +8,6 @@ use App\Http\Controllers\Api\Admin\ReportController as AdminReportController;
 use App\Http\Controllers\Api\Admin\CustomerController;
 use App\Http\Controllers\Api\Admin\ProductController as AdminProductController;
 use App\Http\Controllers\Api\Admin\SubscriptionController as AdminSubscriptionController;
-use App\Http\Controllers\Api\Client\CategorieController;
 use App\Http\Controllers\Api\Client\CommentController;
 use App\Http\Controllers\Api\Client\MessageController;
 use App\Http\Controllers\Api\Client\ProductController;
