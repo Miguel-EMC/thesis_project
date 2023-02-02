@@ -60,7 +60,7 @@ class ProductController extends Controller
     {
         //Se valida la informacion del producto
         $request->validate([
-            'title' => 'required|max:50|min:5',
+            'title' => 'required|max:250|min:5',
             'price' => 'required|numeric|min:1|max:100000000',
             'detail' => 'required',
             'stock' => 'required|numeric|min:1|max:100000',
@@ -112,7 +112,7 @@ class ProductController extends Controller
             );
         }
         $request->validate([
-            'title' => 'required|max:50|min:5',
+            'title' => 'required|max:250|min:5',
             'price' => 'required|numeric|min:1|max:100000000',
             'detail' => 'required',
             'stock' => 'required|numeric|min:1|max:100000',
