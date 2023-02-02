@@ -32,8 +32,8 @@ class ProfileController extends Controller
             'last_name' => ['required', 'string', 'min:3', 'max:35'],
             // https://laravel.com/docs/9.x/validation#rule-unique
             'personal_phone' => ['required', 'numeric', 'digits:10'],
-            'home_phone' => ['nullable', 'numeric', 'digits:9'],
-            'address' => ['required', 'string', 'min:5', 'max:50'],
+            'home_phone' => ['nullable', 'numeric', 'digits:7'],
+            'address' => ['required', 'string', 'min:3', 'max:100'],
         ]);
 
         // Se obtiene el modelo del usuario

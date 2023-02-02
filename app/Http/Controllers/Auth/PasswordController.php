@@ -41,7 +41,7 @@ class PasswordController extends Controller
           $frontend_url = env('APP_FRONTEND_URL');
           $token = $request->route('token');
           $email = $request->email;
-          $url = "http://localhost:3000/login/resetpssw/?token=$token&email=$email";
+          $url = "https://offhouse.vercel.app/login/resetpssw/confirmation/?token=$token&email=$email";
           return $this->sendResponse(message: 'Successful redirection', result: ['url' => $url]);
       }
 
