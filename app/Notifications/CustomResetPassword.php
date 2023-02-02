@@ -47,7 +47,7 @@ class CustomResetPassword extends Notification
             ->greeting(':::: OFHOUSE ::::')
             ->subject(Lang::get('Notificación de restablecimiento de contraseña'))
             ->line(Lang::get('Está recibiendo este correo electrónico porque hemos recibido una solicitud de restablecimiento de contraseña para su cuenta.'))
-            ->action(Lang::get('Restablecer contraseña'), 'http://localhost:3000/login/resetpssw/confirmation/'.$this->token)
+            ->action(Lang::get('Restablecer contraseña'), 'https://offhouse.vercel.app/login/resetpssw/confirmation/'.$this->token)
             ->line(Lang::get('Este enlace de restablecimiento de contraseña caducará en :count minutes.', ['count' => config('auth.passwords.'.config('auth.defaults.passwords').'.expire')]))
             ->line(Lang::get('Si no ha solicitado el restablecimiento de la contraseña, no es necesario realizar ninguna acción.'));
     }
