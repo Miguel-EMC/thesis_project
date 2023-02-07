@@ -7,7 +7,7 @@ OffHouse es un ecommerce C2C (Comprador a Comprador) diseñado para la venta de 
 
 _Todos los colaboradores del proyecto desde sus inicios son:_
 
-- Desarrollo Frontend por [Kevin Pinanjota](https://github.com/Dustinouwu).
+- Desarrollo Frontend por [Dustin Chavéz](https://github.com/Dustinouwu).
 - Desarrollo Backend por [Miguel Muzo](https://github.com/Miguel-EMC).
 
 ## Requisitos
