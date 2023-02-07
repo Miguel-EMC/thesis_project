@@ -1,66 +1,67 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+<p align="center"><a href="https://offhouse.vercel.app" target="_blank"><img src="https://user-images.githubusercontent.com/74844624/217299705-56ad3b15-b3cd-46c6-ab88-d3aa0d9f67be.png" width="100" alt="Laravel Logo"></a></p>
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+# OFFHOUSE - API REST
 
-## About Laravel
+OffHouse es un ecommerce C2C (Comprador a Comprador) diseñado para la venta de electrodomésticos entre particulares. Con una interfaz intuitiva y fácil de usar, ofrece a los vendedores la capacidad de publicar sus productos y a los compradores la posibilidad de buscar y comprar productos en línea mediante un chat. Con seguridad en el pago y un sistema de comentarios para productos, OffHouse es una plataforma confiable para realizar transacciones en línea. ¡Únete a la comunidad de OffHouse y comienza a comprar y vender electrodomésticos de manera sencilla y segura!
+## Requisitos
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- PHP >= 7.2
+- [Composer](https://getcomposer.org/)
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Instalación
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+1. Clona el repositorio en tu computadora.
+2. Ejecuta `composer install` para instalar las dependencias del proyecto.
+3. Crea un archivo `.env` a partir de `.env.example` y configura las variables de entorno, como la conexión a la base de datos.
+4. Ejecuta `php artisan key:generate` para generar una clave para la aplicación.
+5. Ejecuta `php artisan migrate` para ejecutar las migraciones y crear las tablas en la base de datos.
 
-## Learning Laravel
+## Uso
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+La API REST de `OffHouse` te permite acceder y manipular los datos de la plataforma de manera programática. A continuación, se explica cómo funciona la API REST y cómo puedes utilizarla.
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+### Autenticación
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+Antes de poder hacer peticiones a la API REST, debes obtener un token de acceso válido. Puedes hacerlo a través de la autenticación con tu nombre de usuario y contraseña.
 
-## Laravel Sponsors
+### Endpoints
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+La API REST de `OffHouse` expone diferentes endpoints para acceder y manipular los datos. Algunos ejemplos incluyen:
 
-### Premium Partners
+- `GET /products`: Obtiene una lista de todos los productos en el ecommerce.
+- `GET /products/{id}`: Obtiene la información detallada sobre un producto en particular.
+- `POST /products`: Publica un nuevo producto en el ecommerce.
+- `POST /products/{id}`: Actualiza la información sobre un producto existente.
+- `DELETE /products/{id}`: Elimina un producto del ecommerce.
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
 
-## Contributing
+### Peticiones
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Puedes hacer peticiones a la API REST utilizando herramientas como [cURL](https://curl.haxx.se/) o [Postman](https://www.postman.com/). Por ejemplo, aquí hay una petición `GET` para obtener una lista de productos:
 
-## Code of Conduct
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Reemplaza `{token}` con tu token de acceso válido y la respuesta será una lista de productos en formato JSON.
 
-## Security Vulnerabilities
+### Documentación
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Para obtener más información sobre cómo funciona la API REST de `OffHouse` y cómo utilizarla, consulta la [documentación completa de la API](https://documenter.getpostman.com/view/22594154/2s935hSTPh).
 
-## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## Contribución
+
+¡Bienvenido al proyecto `OffHouse`! Estamos encantados de que te interese contribuir. Aquí hay algunas maneras en las que puedes ayudar:
+
+- Reportar errores: Si encuentras un bug o tienes problemas para utilizar la plataforma, abre un informe de problema en GitHub. Asegúrate de incluir una descripción detallada y, si es posible, una forma de reproducir el problema.
+- Proponer características: Si tienes una idea para mejorar la plataforma, abre un informe de solicitud de característica en GitHub. Asegúrate de incluir una descripción detallada de la característica y la motivación detrás de ella.
+- Contribuir con código: Si quieres ayudar a desarrollar la plataforma, puedes hacerlo enviando pull requests en GitHub. Antes de comenzar, asegúrate de leer las directrices de contribución y tener en cuenta las buenas prácticas de programación.
+
+Gracias por considerar contribuir a `OffHouse`. ¡Juntos podemos hacer que la plataforma sea aún mejor!
+
+## Licencia
+
+El código fuente de `OffHouse` está liberado bajo la licencia MIT. Puedes encontrar una copia de la licencia en el archivo [LICENSE](LICENSE).
+
+## Créditos
+
+- Desarrollo Frontend por [Dustin Chávez](https://github.com/Dustinouwu).
+- Desarrollo Backend por [Miguel Muzo](https://github.com/Miguel-EMC).
