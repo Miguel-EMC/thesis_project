@@ -27,7 +27,7 @@ class ProfileController extends Controller
     {
         // Validación de los datos de entrada
         $request->validate([
-            'username' => ['required', 'string', 'min:5', 'max:20', ValidationRule::unique('users')->ignore($request->user()->id)],
+            'username' => ['required', 'string', 'min:5', 'max:60', ValidationRule::unique('users')->ignore($request->user()->id)],
             'first_name' => ['required', 'string', 'min:3', 'max:35'],
             'last_name' => ['required', 'string', 'min:3', 'max:35'],
             // https://laravel.com/docs/9.x/validation#rule-unique
